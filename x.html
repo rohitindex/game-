@@ -1,0 +1,7528 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class X Smart Notes</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+}
+
+header{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    padding:18px 5%;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+}
+
+button{
+    border:none;
+    padding:10px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.nav button{
+    margin-left:8px;
+    background:white;
+    color:#2563eb;
+}
+
+.hero{
+    text-align:center;
+    padding:65px 20px;
+    background:white;
+}
+
+.hero h1{
+    font-size:45px;
+    color:#2563eb;
+    margin-bottom:15px;
+}
+
+.hero p{
+    color:#64748b;
+    margin-bottom:25px;
+}
+
+.search{
+    width:92%;
+    max-width:700px;
+    padding:16px 20px;
+    border:2px solid #2563eb;
+    border-radius:40px;
+    font-size:40px;
+    outline:none;
+}
+
+.container{
+    width:92%;
+    max-width:1200px;
+    margin:auto;
+    padding:45px 0;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:30px;
+    font-size:30px;
+}
+
+.subjects{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.subject{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 5px 20px #00000012;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.subject:hover{
+    transform:translateY(-5px);
+}
+
+.subject .icon{
+    font-size:35px;
+}
+
+.subject h3{
+    color:#2563eb;
+    margin:12px 0;
+}
+
+.subject p{
+    color:#64748b;
+}
+
+.notes{
+    background:#eef4ff;
+}
+
+.chapter{
+    background:white;
+    margin:15px 0;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 3px 12px #00000010;
+}
+
+.chapter-head{
+    padding:20px;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    color:#2563eb;
+    font-size:17px;
+}
+
+.chapter-body{
+    display:none;
+    padding:0 25px 25px;
+}
+
+.chapter.open .chapter-body{
+    display:block;
+}
+
+.topic{
+    padding:18px 0;
+    border-bottom:1px solid #e5e7eb;
+    line-height:1.7;
+}
+
+.topic h4{
+    color:#7c3aed;
+    margin-bottom:8px;
+}
+
+.topic ul{
+    margin-left:25px;
+}
+
+.formula{
+    background:#eff6ff;
+    border-left:5px solid #2563eb;
+    padding:15px;
+    margin:15px 0;
+    font-size:17px;
+}
+
+.complete{
+    margin-top:18px;
+    background:#16a34a;
+    color:white;
+}
+
+.completed{
+    background:#64748b;
+}
+
+footer{
+    background:#111827;
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+body.dark{
+    background:#0f172a;
+    color:white;
+}
+
+body.dark .hero,
+body.dark .subject,
+body.dark .chapter{
+    background:#1e293b;
+}
+
+body.dark .notes{
+    background:#111827;
+}
+
+body.dark .hero p,
+body.dark .subject p{
+    color:#cbd5e1;
+}
+
+body.dark .formula{
+    background:#172554;
+}
+
+@media(max-width:650px){
+    .nav{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="nav">
+
+<div class="logo">
+📚  khajano ki dukan 
+</div>
+
+<div>
+<button onclick="goHome()">🏠 Home</button>
+<button onclick="darkMode()">🌙 Dark Mode</button>
+</div>
+
+</div>
+</header>
+
+
+<section class="hero" id="home">
+
+<h1> khajano ki dukan  </h1>
+
+<p>
+Complete Class 10 Notes • Chapters • Important Points • Formulas
+</p>
+
+<input
+class="search"
+id="search"
+type="text"
+placeholder="🔍 Search chapter or topic..."
+oninput="searchNotes()">
+
+</section>
+
+
+<section class="container">
+
+<h2 class="title">
+📚 All Subjects
+</h2>
+
+<div class="subjects">
+
+<div class="subject" onclick="filterSubject('Science')">
+<div class="icon">🔬</div>
+<h3>Science</h3>
+<p>Physics + Chemistry + Biology</p>
+</div>
+
+<div class="subject" onclick="filterSubject('Mathematics')">
+<div class="icon">📐</div>
+<h3>Mathematics</h3>
+<p>Formulas + Concepts + Examples</p>
+</div>
+
+<div class="subject" onclick="filterSubject('History')">
+<div class="icon">📜</div>
+<h3>History</h3>
+<p>Important events and concepts</p>
+</div>
+
+<div class="subject" onclick="filterSubject('Geography')">
+<div class="icon">🌍</div>
+<h3>Geography</h3>
+<p>Resources + Agriculture + Maps</p>
+</div>
+
+<div class="subject" onclick="filterSubject('Civics')">
+<div class="icon">🏛️</div>
+<h3>Civics</h3>
+<p>Democracy and Politics</p>
+</div>
+
+<div class="subject" onclick="filterSubject('Economics')">
+<div class="icon">💰</div>
+<h3>Economics</h3>
+<p>Money + Development + Sectors</p>
+</div>
+
+<div class="subject" onclick="filterSubject('English')">
+<div class="icon">📖</div>
+<h3>English</h3>
+<p>Literature + Grammar + Writing</p>
+</div>
+
+<div class="subject" onclick="filterSubject('Hindi')">
+<div class="icon">🇮🇳</div>
+<h3>Hindi</h3>
+<p>साहित्य + व्याकरण + लेखन</p>
+</div>
+
+</div>
+</section>
+
+
+<section class="notes">
+
+<div class="container">
+
+<h2 class="title">
+📝 Chapter Wise Notes
+</h2>
+
+<div id="chapters">
+
+
+<!-- SCIENCE -->
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 1 — Chemical Reactions and Equations</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="topic">
+
+<h4>रासायनिक अभिक्रिया</h4>
+
+<p>
+जब एक या एक से अधिक पदार्थ आपस में अभिक्रिया करके
+नए पदार्थ बनाते हैं, तो इसे Chemical Reaction कहते हैं।
+</p>
+
+</div>
+
+<div class="topic">
+
+<h4>Important Topics</h4>
+
+<ul>
+<li>Combination Reaction</li>
+<li>Decomposition Reaction</li>
+<li>Displacement Reaction</li>
+<li>Double Displacement Reaction</li>
+<li>Oxidation</li>
+<li>Reduction</li>
+<li>Corrosion</li>
+<li>Rancidity</li>
+</ul> 
+<h5>CHEMICAL REACTION
+
+Jab ek ya ek se adhik substances react karke naye substances banate hain, use Chemical Reaction kehte hain.
+
+Example:
+Magnesium + Oxygen → Magnesium Oxide
+
+2Mg + O2 → 2MgO
+
+Reactants = Reaction mein participate karne wale substances.
+Products = Reaction ke baad banne wale substances.
+
+==================================================
+
+SIGNS OF A CHEMICAL REACTION
+
+Chemical reaction hone par following changes ho sakte hain:
+
+Change in state
+Change in colour
+Evolution of gas
+Change in temperature
+Formation of precipitate
+
+Example:
+
+Zn + H2SO4 → ZnSO4 + H2
+
+Is reaction mein Hydrogen gas release hoti hai.
+
+Another example:
+
+Fe + CuSO4 → FeSO4 + Cu
+
+Ismein blue CuSO4 solution ka colour change hota hai.
+
+==================================================
+
+CHEMICAL EQUATION
+
+Chemical reaction ko chemical symbols aur formulae ki help se represent karna Chemical Equation kehlata hai.
+
+Word equation:
+
+Magnesium + Oxygen → Magnesium Oxide
+
+Chemical equation:
+
+Mg + O2 → MgO
+
+Balanced equation:
+
+2Mg + O2 → 2MgO
+
+==================================================
+
+BALANCED CHEMICAL EQUATION
+
+Jis chemical equation mein reactants aur products dono sides par har element ke atoms ki number equal ho, use Balanced Chemical Equation kehte hain.
+
+Example:
+
+Unbalanced:
+H2 + O2 → H2O
+
+Balanced:
+2H2 + O2 → 2H2O
+
+IMPORTANT:
+Equation balance karte waqt chemical formula ke subscripts ko change nahi karna chahiye.
+Sirf coefficients change karne chahiye.
+
+==================================================
+
+TYPES OF CHEMICAL REACTIONS
+
+Main types:
+
+Combination Reaction
+Decomposition Reaction
+Displacement Reaction
+Double Displacement Reaction
+Oxidation Reaction
+Reduction Reaction
+Redox Reaction
+
+==================================================
+
+COMBINATION REACTION
+
+Jab two or more substances combine hokar only one product banate hain, use Combination Reaction kehte hain.
+
+General form:
+
+A + B → AB
+
+Example 1:
+
+2Mg + O2 → 2MgO
+
+Example 2:
+
+CaO + H2O → Ca(OH)2
+
+Example 3:
+
+C + O2 → CO2
+
+Example 4:
+
+2H2 + O2 → 2H2O
+
+Example 5: Respiration
+
+C6H12O6 + 6O2 → 6CO2 + 6H2O + Energy
+
+==================================================
+
+DECOMPOSITION REACTION
+
+Jab ek compound break hokar two or more simpler substances banata hai, use Decomposition Reaction kehte hain.
+
+General form:
+
+AB → A + B
+
+DECOMPOSITION KE TYPES:
+
+A. Thermal Decomposition
+B. Electrolytic Decomposition
+C. Photochemical Decomposition
+
+A. THERMAL DECOMPOSITION
+
+Heat dene par compound break hota hai.
+
+Example 1:
+
+CaCO3 --heat--> CaO + CO2
+
+Example 2:
+
+2Pb(NO3)2 --heat--> 2PbO + 4NO2 + O2
+
+B. ELECTROLYTIC DECOMPOSITION
+
+Electricity ki help se compound decompose hota hai.
+
+Example:
+
+2H2O --electricity--> 2H2 + O2
+
+Water → Hydrogen + Oxygen
+
+Hydrogen : Oxygen = 2 : 1
+
+C. PHOTOCHEMICAL DECOMPOSITION
+
+Sunlight ki presence mein compound break hota hai.
+
+Example 1:
+
+2AgCl --sunlight--> 2Ag + Cl2
+
+Example 2:
+
+2AgBr --sunlight--> 2Ag + Br2
+
+==================================================
+
+DISPLACEMENT REACTION
+
+Jab ek more reactive element, less reactive element ko uske compound se displace kar deta hai, use Displacement Reaction kehte hain.
+
+General form:
+
+A + BC → AC + B
+
+Example 1:
+
+Zn + CuSO4 → ZnSO4 + Cu
+
+Example 2:
+
+Fe + CuSO4 → FeSO4 + Cu
+
+Example 3:
+
+Zn + 2HCl → ZnCl2 + H2
+
+IMPORTANT:
+Displacement reaction mein reactivity series ka concept important hai.
+
+==================================================
+
+DOUBLE DISPLACEMENT REACTION
+
+Jab two compounds apne ions exchange karte hain aur new compounds form hote hain, use Double Displacement Reaction kehte hain.
+
+General form:
+
+AB + CD → AD + CB
+
+Example:
+
+Na2SO4 + BaCl2 → BaSO4 + 2NaCl
+
+Yahan BaSO4 ek white precipitate hai.
+
+Another example:
+
+AgNO3 + NaCl → AgCl + NaNO3
+
+AgCl = White precipitate
+
+==================================================
+
+PRECIPITATION REACTION
+
+Jab do solutions ki reaction se ek insoluble solid substance form hota hai, use Precipitation Reaction kehte hain.
+
+Example:
+
+Na2SO4 + BaCl2 → BaSO4 + 2NaCl
+
+BaSO4 = White precipitate
+
+Another example:
+
+AgNO3 + NaCl → AgCl + NaNO3
+
+AgCl = White precipitate
+
+==================================================
+
+OXIDATION
+
+Oxidation ka simple meaning:
+
+Addition of oxygen
+OR
+Removal of hydrogen
+
+Example 1:
+
+2Cu + O2 → 2CuO
+
+Copper mein oxygen add hua.
+
+Example 2:
+
+2Mg + O2 → 2MgO
+
+Magnesium oxidised hua.
+
+==================================================
+
+REDUCTION
+
+Reduction ka simple meaning:
+
+Removal of oxygen
+OR
+Addition of hydrogen
+
+Example:
+
+CuO + H2 → Cu + H2O
+
+CuO se oxygen remove hua.
+
+Therefore CuO is reduced to Cu.
+
+==================================================
+
+REDOX REACTION
+
+Jab oxidation aur reduction ek hi reaction mein simultaneously hote hain, use Redox Reaction kehte hain.
+
+Example:
+
+CuO + H2 → Cu + H2O
+
+CuO → Cu
+Reduction
+
+H2 → H2O
+Oxidation
+
+Therefore, this is a Redox Reaction.
+
+==================================================
+
+EXOTHERMIC REACTION
+
+Jis chemical reaction mein heat/energy release hoti hai, use Exothermic Reaction kehte hain.
+
+Example 1: Respiration
+
+C6H12O6 + 6O2 → 6CO2 + 6H2O + Energy
+
+Example 2:
+
+CH4 + 2O2 → CO2 + 2H2O + Heat
+
+Example 3:
+
+CaO + H2O → Ca(OH)2 + Heat
+
+REMEMBER:
+
+Exothermic = Heat release
+
+==================================================
+
+ENDOTHERMIC REACTION
+
+Jis reaction mein energy absorb hoti hai, use Endothermic Reaction kehte hain.
+
+Example:
+
+CaCO3 --heat--> CaO + CO2
+
+Is reaction ke liye heat required hoti hai.
+
+REMEMBER:
+
+Endothermic = Heat absorbed
+
+==================================================
+
+CORROSION
+
+Metals ka air, moisture ya other substances ke saath reaction karke gradually damage hona Corrosion kehlata hai.
+
+Example:
+
+Iron + Oxygen + Water → Rust
+
+Rust mainly hydrated iron(III) oxide hota hai.
+
+Rusting ke liye zaroori conditions:
+
+Oxygen
+Water/Moisture
+
+CORROSION KO PREVENT KAISE KAREIN?
+
+Painting
+Oiling
+Greasing
+Galvanisation
+Alloying
+
+==================================================
+
+RANCIDITY
+
+Oil aur fats ka oxygen ke saath oxidation hone ke karan food ka taste aur smell kharab ho jata hai. Is process ko Rancidity kehte hain.
+
+RANCIDITY KO PREVENT KAISE KAREIN?
+
+Food ko airtight container mein rakhein.
+Refrigeration karein.
+Antioxidants use karein.
+Food packets mein nitrogen gas fill ki jaati hai.
+
+Example:
+
+Chips packets mein nitrogen gas fill ki jaati hai taaki oxidation slow ho aur rancidity prevent ho.
+
+==================================================
+
+IMPORTANT NCERT REACTIONS
+Magnesium burning:
+
+2Mg + O2 → 2MgO
+
+Type: Combination + Oxidation
+
+Quicklime + Water:
+
+CaO + H2O → Ca(OH)2 + Heat
+
+Type: Combination + Exothermic
+
+Calcium carbonate decomposition:
+
+CaCO3 --heat--> CaO + CO2
+
+Type: Thermal Decomposition
+
+Lead nitrate decomposition:
+
+2Pb(NO3)2 --heat--> 2PbO + 4NO2 + O2
+
+Type: Thermal Decomposition
+
+Silver chloride decomposition:
+
+2AgCl --sunlight--> 2Ag + Cl2
+
+Type: Photochemical Decomposition
+
+Zinc + Copper sulphate:
+
+Zn + CuSO4 → ZnSO4 + Cu
+
+Type: Displacement
+
+Iron + Copper sulphate:
+
+Fe + CuSO4 → FeSO4 + Cu
+
+Type: Displacement
+
+Sodium sulphate + Barium chloride:
+
+Na2SO4 + BaCl2 → BaSO4 + 2NaCl
+
+Type: Double Displacement + Precipitation
+
+Copper oxide + Hydrogen:
+
+CuO + H2 → Cu + H2O
+
+Type: Redox Reaction
+
+Zinc + Hydrochloric acid:
+
+Zn + 2HCl → ZnCl2 + H2
+
+Type: Displacement
+
+==================================================
+
+QUICK REVISION
+
+Combination:
+Many reactants → One product
+
+Decomposition:
+One reactant → Many products
+
+Displacement:
+One element displaces another element.
+
+Double Displacement:
+Exchange of ions between two compounds.
+
+Oxidation:
+Addition of Oxygen / Removal of Hydrogen
+
+Reduction:
+Removal of Oxygen / Addition of Hydrogen
+
+Redox:
+Oxidation + Reduction together
+
+Exothermic:
+Heat is released.
+
+Endothermic:
+Heat is absorbed.
+
+Corrosion:
+Gradual damage of metals.
+
+Rancidity:
+Oxidation of fats and oils causing bad smell and taste.
+
+==================================================
+
+MOST IMPORTANT EQUATIONS FOR EXAM
+
+2Mg + O2 → 2MgO
+
+CaO + H2O → Ca(OH)2 + Heat
+
+CaCO3 --heat--> CaO + CO2
+
+2Pb(NO3)2 --heat--> 2PbO + 4NO2 + O2
+
+2H2O --electricity--> 2H2 + O2
+
+2AgCl --sunlight--> 2Ag + Cl2
+
+2AgBr --sunlight--> 2Ag + Br2
+
+Zn + CuSO4 → ZnSO4 + Cu
+
+Fe + CuSO4 → FeSO4 + Cu
+
+Zn + 2HCl → ZnCl2 + H2
+
+Na2SO4 + BaCl2 → BaSO4 + 2NaCl
+
+AgNO3 + NaCl → AgCl + NaNO3
+
+CuO + H2 → Cu + H2O
+
+C6H12O6 + 6O2 → 6CO2 + 6H2O + Energy
+
+CH4 + 2O2 → CO2 + 2H2O + Heat</h5>
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 2 — Acids, Bases and Salts</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="topic">
+
+<h4>Acid</h4>
+
+<p>
+Acid ऐसे पदार्थ होते हैं जो aqueous solution में
+H⁺ ions प्रदान करते हैं।
+</p>
+
+</div>
+
+<div class="topic">
+
+<h4>Base</h4>
+
+<p>
+Base aqueous solution में OH⁻ ions प्रदान करते हैं।
+</p>
+
+</div>
+
+<div class="topic">
+
+<h4>Important Topics</h4>
+
+<ul>
+<li>Indicators</li>
+<li>pH Scale</li>
+<li>Neutralisation</li>
+<li>Baking Soda</li>
+<li>Washing Soda</li>
+<li>Plaster of Paris</li>
+<li>Common Salt</li>
+</ul>
+    <h5>ACIDS
+
+Acids are substances which produce H+ ions in aqueous solution.
+
+Simple meaning:
+Acid wo substance hai jo water mein dissolve hone par H+ ions produce karta hai.
+
+Examples:
+
+HCl = Hydrochloric acid
+H2SO4 = Sulphuric acid
+HNO3 = Nitric acid
+CH3COOH = Acetic acid
+
+==================================================
+
+BASES
+
+Bases are substances which produce OH- ions in aqueous solution.
+
+Simple meaning:
+Base wo substance hai jo water mein dissolve hone par OH- ions produce karta hai.
+
+Examples:
+
+NaOH = Sodium hydroxide
+KOH = Potassium hydroxide
+Ca(OH)2 = Calcium hydroxide
+Mg(OH)2 = Magnesium hydroxide
+
+==================================================
+
+INDICATORS
+
+Indicators are substances which tell us whether a solution is acidic or basic by showing a change in colour or smell.
+
+IMPORTANT INDICATORS:
+
+Litmus
+Methyl orange
+Phenolphthalein
+Turmeric
+Olfactory indicators
+
+A. LITMUS
+
+Acid:
+Blue litmus → Red
+
+Base:
+Red litmus → Blue
+
+B. METHYL ORANGE
+
+Acidic solution → Red
+
+Basic solution → Yellow
+
+C. PHENOLPHTHALEIN
+
+Acidic solution → Colourless
+
+Basic solution → Pink
+
+D. TURMERIC
+
+Base ke contact mein turmeric → Reddish-brown
+
+==================================================
+
+OLFACTORY INDICATORS
+
+Aise indicators jinki smell acidic/basic medium mein change ho jaati hai, unhe olfactory indicators kehte hain.
+
+Examples:
+
+Onion
+Vanilla essence
+Clove oil
+
+==================================================
+
+PROPERTIES OF ACIDS
+
+Acids generally:
+
+Sour taste dete hain.
+Blue litmus ko red karte hain.
+H+ ions produce karte hain.
+Metals ke saath reaction karke hydrogen gas produce kar sakte hain.
+Bases ke saath reaction karke salt + water banate hain.
+Carbonates ke saath reaction karke CO2 gas produce karte hain.
+
+IMPORTANT:
+Laboratory acids ko taste nahi karna chahiye.
+
+==================================================
+
+PROPERTIES OF BASES
+
+Bases generally:
+
+Bitter taste hote hain.
+Soapy/slippery feel de sakte hain.
+Red litmus ko blue karte hain.
+OH- ions produce karte hain.
+Acids ke saath reaction karke salt + water banate hain.
+
+==================================================
+
+ACID + METAL REACTION
+
+Acid + Metal → Salt + Hydrogen gas
+
+Example 1:
+
+Zn + 2HCl → ZnCl2 + H2
+
+Zinc + Hydrochloric acid → Zinc chloride + Hydrogen
+
+Example 2:
+
+Mg + 2HCl → MgCl2 + H2
+
+Example 3:
+
+2Al + 6HCl → 2AlCl3 + 3H2
+
+IMPORTANT:
+Hydrogen gas ko test karne par "pop sound" mil sakti hai.
+
+==================================================
+
+ACID + METAL CARBONATE
+
+Acid + Metal Carbonate → Salt + Water + CO2
+
+Example:
+
+Na2CO3 + 2HCl → 2NaCl + H2O + CO2
+
+Sodium carbonate + Hydrochloric acid → Sodium chloride + Water + Carbon dioxide
+
+==================================================
+
+ACID + METAL HYDROGENCARBONATE
+
+Acid + Metal Hydrogencarbonate → Salt + Water + CO2
+
+Example:
+
+NaHCO3 + HCl → NaCl + H2O + CO2
+
+Sodium hydrogencarbonate + Hydrochloric acid → Sodium chloride + Water + Carbon dioxide
+
+==================================================
+
+TEST FOR CO2
+
+Carbon dioxide gas ko lime water mein pass karne par lime water milky ho jata hai.
+
+Reaction:
+
+Ca(OH)2 + CO2 → CaCO3 + H2O
+
+CaCO3 = Calcium carbonate
+It makes lime water milky.
+
+EXCESS CO2 pass karne par:
+
+CaCO3 + CO2 + H2O → Ca(HCO3)2
+
+Isse milkiness disappear ho sakti hai.
+
+==================================================
+
+ACID + BASE
+
+Acid + Base → Salt + Water
+
+Is reaction ko NEUTRALISATION REACTION kehte hain.
+
+Example:
+
+HCl + NaOH → NaCl + H2O
+
+Hydrochloric acid + Sodium hydroxide → Sodium chloride + Water
+
+Another example:
+
+H2SO4 + 2NaOH → Na2SO4 + 2H2O
+
+==================================================
+
+ACID + METAL OXIDE
+
+Acid + Metal Oxide → Salt + Water
+
+Example:
+
+CuO + 2HCl → CuCl2 + H2O
+
+Copper oxide + Hydrochloric acid → Copper chloride + Water
+
+Another example:
+
+MgO + 2HCl → MgCl2 + H2O
+
+==================================================
+
+BASE + NON-METALLIC OXIDE
+
+Base + Non-metallic oxide → Salt + Water
+
+Example:
+
+Ca(OH)2 + CO2 → CaCO3 + H2O
+
+Calcium hydroxide + Carbon dioxide → Calcium carbonate + Water
+
+This shows that non-metallic oxides are generally acidic in nature.
+
+==================================================
+
+WHAT HAPPENS WHEN ACID DISSOLVES IN WATER?
+
+Acids produce H+ ions in water.
+
+Example:
+
+HCl + H2O → H3O+ + Cl-
+
+H+ ion does not exist freely in water.
+It combines with H2O to form H3O+ (hydronium ion).
+
+==================================================
+
+WHAT HAPPENS WHEN BASE DISSOLVES IN WATER?
+
+Bases produce OH- ions in aqueous solution.
+
+Example:
+
+NaOH → Na+ + OH-
+
+KOH → K+ + OH-
+
+==================================================
+
+IMPORTANCE OF WATER FOR ACIDS
+
+Acidic behaviour water ki presence mein show hota hai because acid produces ions in aqueous solution.
+
+Example:
+
+HCl + H2O → H3O+ + Cl-
+
+Dry HCl gas dry litmus paper ka colour change nahi karti because water is absent.
+
+==================================================
+
+pH SCALE
+
+pH scale kisi solution ki acidic ya basic nature ko measure karti hai.
+
+pH scale:
+0 to 14
+
+pH < 7 = Acidic
+pH = 7 = Neutral
+pH > 7 = Basic
+
+Examples:
+
+pH 1 → Strong acid
+pH 3 → Acidic
+pH 7 → Neutral
+pH 9 → Basic
+pH 14 → Strong base
+
+IMPORTANT:
+Lower pH = More acidic
+
+Higher pH = More basic
+
+==================================================
+
+IMPORTANCE OF pH IN DAILY LIFE
+
+A. DIGESTION
+
+Our stomach produces hydrochloric acid (HCl).
+
+Excess acid causes indigestion.
+
+Antacids are used to neutralise excess acid.
+
+Example:
+
+Mg(OH)2 + 2HCl → MgCl2 + 2H2O
+
+==================================================
+
+B. TOOTH DECAY
+
+Tooth enamel starts getting damaged when mouth ka pH approximately 5.5 se below ho jata hai.
+
+Toothpaste generally basic nature ka hota hai, so it helps neutralise acids in the mouth.
+
+==================================================
+
+C. SOIL pH
+
+Plants require a suitable pH for proper growth.
+
+If soil is too acidic:
+Farmers can add substances such as quicklime/slaked lime to reduce acidity.
+
+==================================================
+
+D. STING OF BEE
+
+Bee sting contains acidic substances.
+
+Baking soda (sodium hydrogencarbonate) can help neutralise the acid.
+
+NaHCO3 is a mild base.
+
+==================================================
+
+SALTS
+
+Salt generally acid aur base ki reaction se form hota hai.
+
+Example:
+
+HCl + NaOH → NaCl + H2O
+
+NaCl = Sodium chloride
+
+Other examples:
+
+Na2SO4 = Sodium sulphate
+
+KCl = Potassium chloride
+
+CaCO3 = Calcium carbonate
+
+NH4Cl = Ammonium chloride
+
+==================================================
+
+COMMON SALT
+
+Common salt = Sodium chloride
+
+Formula:
+
+NaCl
+
+It is obtained from seawater and salt deposits.
+
+==================================================
+
+CHLOR-ALKALI PROCESS
+
+Brine = concentrated aqueous solution of sodium chloride.
+
+Electrolysis of brine gives:
+
+Sodium hydroxide + Chlorine + Hydrogen
+
+Equation:
+
+2NaCl + 2H2O → 2NaOH + Cl2 + H2
+
+Products:
+
+NaOH = Sodium hydroxide
+Cl2 = Chlorine
+H2 = Hydrogen
+
+==================================================
+
+BLEACHING POWDER
+
+Formula:
+
+CaOCl2
+
+Name:
+
+Calcium oxychloride
+
+Preparation:
+
+Ca(OH)2 + Cl2 → CaOCl2 + H2O
+
+Uses:
+
+Disinfecting drinking water
+Bleaching cotton and linen
+Bleaching wood pulp
+Used in paper industry
+
+==================================================
+
+BAKING SODA
+
+Chemical name:
+
+Sodium hydrogencarbonate
+
+Formula:
+
+NaHCO3
+
+On heating:
+
+2NaHCO3 → Na2CO3 + H2O + CO2
+
+Uses:
+
+Baking powder
+Antacid
+Fire extinguishers
+
+==================================================
+
+BAKING POWDER
+
+Baking powder contains:
+
+Baking soda + Mild edible acid
+
+Common acid:
+Tartaric acid
+
+On heating, CO2 is produced.
+
+NaHCO3 + H+ → Salt + H2O + CO2
+
+CO2 makes the cake/bread soft and spongy.
+
+==================================================
+
+WASHING SODA
+
+Chemical name:
+
+Sodium carbonate decahydrate
+
+Formula:
+
+Na2CO3.10H2O
+
+Preparation:
+
+2NaHCO3 → Na2CO3 + H2O + CO2
+
+Then:
+
+Na2CO3 + 10H2O → Na2CO3.10H2O
+
+Uses:
+
+Cleaning agent
+Removing permanent hardness of water
+Manufacturing glass
+Manufacturing soap and paper
+
+==================================================
+
+PLASTER OF PARIS
+
+Chemical name:
+
+Calcium sulphate hemihydrate
+
+Formula:
+
+CaSO4.1/2H2O
+
+Preparation:
+
+CaSO4.2H2O --heat--> CaSO4.1/2H2O + 3/2H2O
+
+Gypsum:
+
+CaSO4.2H2O
+
+Plaster of Paris:
+
+CaSO4.1/2H2O
+
+When mixed with water:
+
+CaSO4.1/2H2O + 3/2H2O → CaSO4.2H2O
+
+Uses:
+
+Making casts for fractured bones
+Making statues
+Making decorative materials
+Making moulds
+
+==================================================
+
+WATER OF CRYSTALLISATION
+
+The fixed number of water molecules present in one formula unit of a salt is called Water of Crystallisation.
+
+Example:
+
+CuSO4.5H2O
+
+Copper sulphate crystals contain 5 water molecules.
+
+On heating:
+
+CuSO4.5H2O --heat--> CuSO4 + 5H2O
+
+Blue copper sulphate crystals become white.
+
+Adding water again:
+
+CuSO4 + 5H2O → CuSO4.5H2O
+
+Blue colour returns.
+
+==================================================
+
+IMPORTANT SALTS AND THEIR FORMULAS
+
+Common Salt:
+NaCl
+
+Baking Soda:
+NaHCO3
+
+Washing Soda:
+Na2CO3.10H2O
+
+Bleaching Powder:
+CaOCl2
+
+Plaster of Paris:
+CaSO4.1/2H2O
+
+Gypsum:
+CaSO4.2H2O
+
+==================================================
+
+IMPORTANT REACTIONS - CHAPTER 2
+Zn + 2HCl → ZnCl2 + H2
+Mg + 2HCl → MgCl2 + H2
+Na2CO3 + 2HCl → 2NaCl + H2O + CO2
+NaHCO3 + HCl → NaCl + H2O + CO2
+Ca(OH)2 + CO2 → CaCO3 + H2O
+CaCO3 + CO2 + H2O → Ca(HCO3)2
+HCl + NaOH → NaCl + H2O
+H2SO4 + 2NaOH → Na2SO4 + 2H2O
+CuO + 2HCl → CuCl2 + H2O
+2NaHCO3 → Na2CO3 + H2O + CO2
+2NaCl + 2H2O → 2NaOH + Cl2 + H2
+Ca(OH)2 + Cl2 → CaOCl2 + H2O
+CaSO4.2H2O --heat--> CaSO4.1/2H2O + 3/2H2O
+CaSO4.1/2H2O + 3/2H2O → CaSO4.2H2O
+
+==================================================
+
+ONE-SHOT REVISION
+
+Acid:
+Produces H+ / H3O+ ions in water.
+
+Base:
+Produces OH- ions in water.
+
+Acid + Metal:
+Salt + H2
+
+Acid + Metal Carbonate:
+Salt + H2O + CO2
+
+Acid + Base:
+Salt + H2O
+
+Acid + Metal Oxide:
+Salt + H2O
+
+pH < 7:
+Acidic
+
+pH = 7:
+Neutral
+
+pH > 7:
+Basic
+
+NaCl:
+Common salt
+
+NaHCO3:
+Baking soda
+
+Na2CO3.10H2O:
+Washing soda
+
+CaOCl2:
+Bleaching powder
+
+CaSO4.1/2H2O:
+Plaster of Paris
+
+CaSO4.2H2O:
+Gypsum
+
+CuSO4.5H2O:
+Copper sulphate crystals
+
+==================================================
+
+MOST IMPORTANT FOR CBSE BOARD
+
+Definitely prepare these:
+
+pH scale
+Properties of acids and bases
+Acid + metal reactions
+Acid + carbonate reactions
+Neutralisation reaction
+Chlor-alkali process
+Baking soda
+Washing soda
+Bleaching powder
+Plaster of Paris
+Water of crystallisation
+Important chemical equations
+Uses of important salts
+Importance of pH in daily life
+H3O+ formation in water</h5>
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 3 — Metals and Non-metals</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="topic">
+
+<h4>Important Topics</h4>
+
+<ul>
+<li>Physical Properties</li>
+<li>Chemical Properties</li>
+<li>Reactivity Series</li>
+<li>Ionic Compounds</li>
+<li>Extraction of Metals</li>
+<li>Corrosion</li>
+<li>Prevention of Corrosion</li>
+</ul> 
+    <h5> CLASS 10 SCIENCE
+CHAPTER 3 - METALS AND NON-METALS
+FULL NOTES
+
+==================================================
+
+1. METALS ⚙️
+
+Metals are generally hard, lustrous, malleable, ductile and good conductors of heat and electricity.
+
+Examples:
+
+Iron (Fe)
+Copper (Cu)
+Aluminium (Al)
+Zinc (Zn)
+Magnesium (Mg)
+Sodium (Na)
+Potassium (K)
+Gold (Au)
+Silver (Ag)
+
+==================================================
+
+2. PHYSICAL PROPERTIES OF METALS 🔩
+
+1. Lustrous:
+Metals generally have a shiny surface.
+
+Example:
+Gold and silver are lustrous.
+
+2. Hard:
+Most metals are hard.
+
+Exception:
+Sodium and potassium are soft metals.
+
+3. Malleability:
+Metals can be beaten into thin sheets.
+
+Example:
+Gold and aluminium are highly malleable.
+
+4. Ductility:
+Metals can be drawn into thin wires.
+
+Example:
+Copper and aluminium are ductile.
+
+5. Good conductors:
+Metals generally conduct heat and electricity.
+
+Example:
+Copper and aluminium are used in electrical wires.
+
+6. Sonorous:
+Metals produce a ringing sound when struck.
+
+==================================================
+
+3. EXCEPTIONS IN METALS ⚠️
+
+Mercury (Hg):
+It is liquid at room temperature.
+
+Sodium (Na) and Potassium (K):
+They are very soft and can be cut with a knife.
+
+Gallium:
+It can melt in the palm because of its low melting point.
+
+==================================================
+
+4. NON-METALS 🧪
+
+Non-metals generally do not show the properties of metals.
+
+Examples:
+
+Carbon (C)
+Sulphur (S)
+Oxygen (O)
+Nitrogen (N)
+Phosphorus (P)
+Chlorine (Cl)
+Bromine (Br)
+Iodine (I)
+
+==================================================
+
+5. PHYSICAL PROPERTIES OF NON-METALS 🌿
+
+1. Generally dull.
+2. Generally brittle.
+3. Generally poor conductors of heat and electricity.
+4. Not malleable.
+5. Not ductile.
+6. Not sonorous.
+
+IMPORTANT EXCEPTIONS:
+
+Graphite is a good conductor of electricity.
+
+Iodine is lustrous.
+
+Diamond is very hard.
+
+Bromine is a liquid non-metal.
+
+==================================================
+
+6. REACTION OF METALS WITH OXYGEN 🔥
+
+Metals react with oxygen to form metal oxides.
+
+General reaction:
+
+Metal + Oxygen → Metal Oxide
+
+Example 1:
+
+2Mg + O2 → 2MgO
+
+Example 2:
+
+4Na + O2 → 2Na2O
+
+Example 3:
+
+2Cu + O2 → 2CuO
+
+==================================================
+
+7. NATURE OF METAL OXIDES 🧪
+
+Most metal oxides are BASIC in nature.
+
+Example:
+
+MgO + 2HCl → MgCl2 + H2O
+
+Some metal oxides are AMPHOTERIC.
+
+Amphoteric oxides react with both acids and bases.
+
+Important examples:
+
+Aluminium oxide (Al2O3)
+Zinc oxide (ZnO)
+
+Example with acid:
+
+ZnO + 2HCl → ZnCl2 + H2O
+
+Example with base:
+
+ZnO + 2NaOH → Na2ZnO2 + H2O
+
+==================================================
+
+8. REACTION OF NON-METALS WITH OXYGEN 🔥
+
+Non-metals react with oxygen to form non-metal oxides.
+
+Example:
+
+C + O2 → CO2
+
+S + O2 → SO2
+
+Most non-metal oxides are acidic in nature.
+
+Example:
+
+CO2 + H2O → H2CO3
+
+SO2 + H2O → H2SO3
+
+==================================================
+
+9. REACTION OF METALS WITH WATER 💧
+
+Different metals react with water differently.
+
+Potassium and sodium react very vigorously with cold water.
+
+Example:
+
+2Na + 2H2O → 2NaOH + H2 + Heat
+
+Potassium:
+
+2K + 2H2O → 2KOH + H2 + Heat
+
+Calcium reacts less violently:
+
+Ca + 2H2O → Ca(OH)2 + H2
+
+Magnesium reacts with hot water:
+
+Mg + 2H2O → Mg(OH)2 + H2
+
+Iron reacts with steam:
+
+3Fe + 4H2O → Fe3O4 + 4H2
+
+==================================================
+
+10. REACTION OF METALS WITH ACIDS 🧪
+
+Metals above hydrogen in the reactivity series generally react with dilute acids to produce salt and hydrogen gas.
+
+General reaction:
+
+Metal + Acid → Salt + Hydrogen
+
+Example 1:
+
+Zn + 2HCl → ZnCl2 + H2
+
+Example 2:
+
+Mg + 2HCl → MgCl2 + H2
+
+Example 3:
+
+Fe + 2HCl → FeCl2 + H2
+
+IMPORTANT:
+
+Copper does not react with dilute HCl because copper is below hydrogen in the reactivity series.
+
+==================================================
+
+11. REACTION OF METALS WITH BASES ⚡
+
+Some metals react with strong bases.
+
+Example:
+
+Zinc + Sodium hydroxide:
+
+Zn + 2NaOH → Na2ZnO2 + H2
+
+Aluminium also reacts with strong bases.
+
+2Al + 2NaOH + 2H2O → 2NaAlO2 + 3H2
+
+==================================================
+
+12. REACTION OF METALS WITH SALT SOLUTIONS 🔄
+
+A more reactive metal can displace a less reactive metal from its salt solution.
+
+Example:
+
+Fe + CuSO4 → FeSO4 + Cu
+
+Iron is more reactive than copper.
+
+Another example:
+
+Zn + CuSO4 → ZnSO4 + Cu
+
+Zinc is more reactive than copper.
+
+But:
+
+Cu + ZnSO4 → No reaction
+
+Because copper is less reactive than zinc.
+
+==================================================
+
+13. REACTIVITY SERIES ⭐
+
+The arrangement of metals in decreasing order of their reactivity is called the Reactivity Series.
+
+Most reactive
+↓
+K
+Na
+Ca
+Mg
+Al
+Zn
+Fe
+Pb
+H
+Cu
+Hg
+Ag
+Au
+↓
+Least reactive
+
+IMPORTANT:
+
+Metals above hydrogen can generally displace hydrogen from dilute acids.
+
+==================================================
+
+14. EXTRACTION OF METALS ⛏️
+
+Metals are extracted from their ores.
+
+Steps generally involved:
+
+1. Concentration of ore
+2. Conversion of ore into oxide
+3. Reduction of metal oxide
+4. Refining of metal
+
+==================================================
+
+15. EXTRACTION ACCORDING TO REACTIVITY ⚙️
+
+A. Highly reactive metals:
+
+K, Na, Ca, Mg, Al
+
+These are extracted by ELECTROLYSIS.
+
+Example:
+
+2NaCl → 2Na + Cl2
+
+B. Moderately reactive metals:
+
+Zn, Fe, Pb, etc.
+
+Their ores are generally converted into oxides and then reduced using carbon or other reducing agents.
+
+Example:
+
+ZnO + C → Zn + CO
+
+C. Low reactive metals:
+
+Cu, Hg, Ag, Au
+
+They can often be obtained by heating their ores or through other suitable processes.
+
+==================================================
+
+16. ROASTING 🔥
+
+Sulphide ores are heated strongly in the presence of excess air.
+
+Example:
+
+2ZnS + 3O2 → 2ZnO + 2SO2
+
+==================================================
+
+17. CALCINATION 🔥
+
+Carbonate ores are heated strongly in limited or no air.
+
+Example:
+
+ZnCO3 → ZnO + CO2
+
+==================================================
+
+18. REDUCTION 🧲
+
+Metal oxide is reduced to metal.
+
+Example:
+
+ZnO + C → Zn + CO
+
+Here:
+
+ZnO → Zn = Reduction
+
+==================================================
+
+19. THERMITE REACTION 🔥
+
+Aluminium is used as a reducing agent.
+
+Example:
+
+Fe2O3 + 2Al → 2Fe + Al2O3 + Heat
+
+This reaction produces a large amount of heat.
+
+Uses:
+
+It is used for welding railway tracks.
+
+==================================================
+
+20. REFINING OF METALS ✨
+
+The process of obtaining pure metal from an impure metal is called Refining.
+
+Electrolytic refining is used for metals such as:
+
+Copper
+Zinc
+Silver
+Gold
+
+==================================================
+
+21. ELECTROLYTIC REFINING OF COPPER 🔋
+
+In electrolytic refining:
+
+Anode = Impure copper
+
+Cathode = Pure copper
+
+Electrolyte = Copper sulphate solution
+
+When electric current is passed:
+
+Copper from the anode dissolves and gets deposited on the cathode.
+
+Impurities settle at the bottom as anode mud.
+
+==================================================
+
+22. IONIC COMPOUNDS ⚡
+
+Ionic compounds are formed by transfer of electrons from one atom to another.
+
+Example:
+
+Formation of NaCl:
+
+Na → Na+ + e-
+
+Cl + e- → Cl-
+
+Then:
+
+Na+ + Cl- → NaCl
+
+Sodium loses one electron.
+
+Chlorine gains one electron.
+
+==================================================
+
+23. PROPERTIES OF IONIC COMPOUNDS 🧂
+
+1. They are generally hard.
+2. They have high melting and boiling points.
+3. They are generally soluble in water.
+4. They conduct electricity in molten state.
+5. They conduct electricity in aqueous solution.
+6. They do not conduct electricity in solid state.
+
+WHY?
+
+Because ions cannot move freely in solid state.
+
+==================================================
+
+24. OCCURRENCE OF METALS 🌍
+
+Metals occur in the Earth's crust in two forms:
+
+1. Minerals
+2. Ores
+
+Mineral:
+Naturally occurring substance containing metal or its compounds.
+
+Ore:
+A mineral from which metal can be extracted profitably.
+
+==================================================
+
+25. CORROSION 🛡️
+
+The gradual destruction of metals due to reaction with air, moisture or chemicals is called corrosion.
+
+Example:
+
+Rusting of iron.
+
+Iron + Oxygen + Water → Rust
+
+Rust is mainly hydrated iron(III) oxide.
+
+==================================================
+
+26. PREVENTION OF CORROSION 🛡️
+
+Corrosion can be prevented by:
+
+1. Painting
+2. Oiling
+3. Greasing
+4. Galvanisation
+5. Alloying
+
+==================================================
+
+27. GALVANISATION 🧤
+
+Coating iron or steel with a layer of zinc to prevent rusting is called galvanisation.
+
+Zinc protects iron from corrosion.
+
+==================================================
+
+28. ALLOYS 🔧
+
+An alloy is a homogeneous mixture of two or more metals, or a metal and a non-metal.
+
+Examples:
+
+Brass = Copper + Zinc
+
+Bronze = Copper + Tin
+
+Solder = Lead + Tin
+
+Stainless steel = Iron + Chromium + Nickel + Carbon
+
+==================================================
+
+29. WHY ARE ALLOYS USED? 💡
+
+Alloys generally have better properties than pure metals.
+
+For example:
+
+Stainless steel is harder and more resistant to corrosion than ordinary iron.
+
+==================================================
+
+30. IMPORTANT REACTIONS OF CHAPTER 3 ⭐
+
+1. 2Mg + O2 → 2MgO
+
+2. 4Na + O2 → 2Na2O
+
+3. C + O2 → CO2
+
+4. 2Na + 2H2O → 2NaOH + H2 + Heat
+
+5. Ca + 2H2O → Ca(OH)2 + H2
+
+6. Mg + 2H2O → Mg(OH)2 + H2
+
+7. 3Fe + 4H2O → Fe3O4 + 4H2
+
+8. Zn + 2HCl → ZnCl2 + H2
+
+9. Fe + 2HCl → FeCl2 + H2
+
+10. Fe + CuSO4 → FeSO4 + Cu
+
+11. Zn + CuSO4 → ZnSO4 + Cu
+
+12. ZnO + 2HCl → ZnCl2 + H2O
+
+13. ZnO + 2NaOH → Na2ZnO2 + H2O
+
+14. 2ZnS + 3O2 → 2ZnO + 2SO2
+
+15. ZnCO3 → ZnO + CO2
+
+16. ZnO + C → Zn + CO
+
+17. Fe2O3 + 2Al → 2Fe + Al2O3 + Heat
+
+==================================================
+
+31. IMPORTANT DIFFERENCES 📚
+
+METALS vs NON-METALS
+
+Metals:
+1. Generally lustrous.
+2. Generally hard.
+3. Malleable.
+4. Ductile.
+5. Good conductors.
+6. Sonorous.
+
+Non-metals:
+1. Generally dull.
+2. Generally brittle.
+3. Non-malleable.
+4. Non-ductile.
+5. Generally poor conductors.
+6. Non-sonorous.
+
+==================================================
+
+32. IMPORTANT TERMS ⭐
+
+Malleability:
+Ability of a metal to be beaten into thin sheets.
+
+Ductility:
+Ability of a metal to be drawn into wires.
+
+Sonorous:
+Property of producing a ringing sound.
+
+Mineral:
+Naturally occurring substance containing metal or its compounds.
+
+Ore:
+Mineral from which metal can be extracted profitably.
+
+Gangue:
+Unwanted impurities present in an ore.
+
+Corrosion:
+Gradual destruction of metal by air, moisture or chemicals.
+
+Alloy:
+Homogeneous mixture of metals or metal and non-metal.
+
+Galvanisation:
+Coating iron/steel with zinc to prevent corrosion.
+
+==================================================
+
+33. ONE-SHOT REVISION 🧠
+
+Metal + Oxygen → Metal Oxide
+
+Metal + Water → Metal Hydroxide/Oxide + H2
+
+Metal + Acid → Salt + H2
+
+More reactive metal + Salt → New salt + Less reactive metal
+
+Sulphide ore --Roasting--> Metal oxide
+
+Carbonate ore --Calcination--> Metal oxide
+
+Metal oxide + Reducing agent → Metal
+
+Iron + Oxygen + Water → Rust
+
+Brass = Cu + Zn
+
+Bronze = Cu + Sn
+
+Stainless steel = Fe + Cr + Ni + C
+
+==================================================
+
+34. MOST IMPORTANT FOR CBSE BOARD 🎯
+
+1. Reactivity series
+2. Physical properties of metals and non-metals
+3. Chemical properties of metals
+4. Reaction with oxygen
+5. Reaction with water
+6. Reaction with acids
+7. Reaction with salt solutions
+8. Ionic compounds and their properties
+9. Extraction of metals
+10. Roasting and calcination
+11. Thermite reaction
+12. Electrolytic refining
+13. Corrosion and prevention
+14. Alloys and their uses
+15. Important chemical equations</h5>
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 4 — Carbon and Its Compounds</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="topic">
+
+<h4>Carbon</h4>
+
+<p>
+Carbon की tetravalency और catenation के कारण
+बहुत सारे carbon compounds बनते हैं।
+</p>
+
+</div>
+
+<ul>
+<li>Covalent Bond</li>
+<li>Hydrocarbons</li>
+<li>Homologous Series</li>
+<li>Functional Groups</li>
+<li>Ethanol</li>
+<li>Ethanoic Acid</li>
+<li>Soap and Detergents</li>
+</ul> 
+    <h5>CLASS 10 SCIENCE
+CHAPTER 5 - PERIODIC CLASSIFICATION OF ELEMENTS
+FULL NOTES + SAMPLE PAPER QUESTIONS
+
+==================================================
+
+1. ELEMENTS KO CLASSIFY KARNE KI ZAROORAT 🔬
+
+Scientists ne elements ki properties ko systematically study karne ke liye unhe groups mein arrange kiya.
+
+Classification ka main purpose:
+
+1. Elements ko easily study karna.
+2. Similar properties wale elements ko ek saath rakhna.
+3. Unknown elements ki properties predict karna.
+4. Elements ke behaviour ko samajhna.
+
+==================================================
+
+2. DOBEREINER'S TRIADS 👨‍🔬
+
+Johann Wolfgang Dobereiner ne 1829 mein elements ko groups of three mein arrange kiya.
+
+In groups ko TRIADS kaha gaya.
+
+Triad mein middle element ka atomic mass approximately baaki dono elements ke atomic masses ka average hota tha.
+
+Example:
+
+Li, Na, K
+
+Atomic masses:
+
+Li = 7
+Na = 23
+K = 39
+
+Average of Li and K:
+
+(7 + 39) / 2 = 23
+
+Therefore, Na ka atomic mass = 23.
+
+Another example:
+
+Ca, Sr, Ba
+
+==================================================
+
+SAMPLE PAPER QUESTION 📝
+
+Q. What is a Dobereiner's triad?
+
+ANSWER:
+
+A group of three elements having similar chemical properties in which the atomic mass of the middle element is approximately the average of the other two elements is called a Dobereiner's triad.
+
+==================================================
+
+3. LIMITATION OF DOBEREINER'S TRIADS ❌
+
+Dobereiner could identify only a few triads.
+
+All known elements could not be arranged into triads.
+
+Therefore, this classification was not suitable for all elements.
+
+==================================================
+
+4. NEWLANDS' LAW OF OCTAVES 🎵
+
+John Newlands proposed the Law of Octaves in 1866.
+
+He arranged elements in increasing order of atomic masses.
+
+He observed that every eighth element had properties similar to the first element.
+
+It was called the Law of Octaves because it was similar to the eight notes of music.
+
+Example:
+
+Li, Be, B, C, N, O, F, Na
+
+Li and Na have similar properties.
+
+==================================================
+
+5. LIMITATIONS OF NEWLANDS' LAW ❌
+
+1. It was applicable only up to calcium.
+
+2. New elements discovered later could not be fitted properly.
+
+3. Some dissimilar elements were placed together.
+
+4. Two elements were sometimes placed in the same slot.
+
+==================================================
+
+SAMPLE PAPER QUESTION 📝
+
+Q. Why was Newlands' Law of Octaves rejected?
+
+ANSWER:
+
+Newlands' Law of Octaves was rejected because it was applicable only up to calcium, could not accommodate newly discovered elements and placed some dissimilar elements together.
+
+==================================================
+
+6. MENDELEEV'S PERIODIC TABLE ⭐
+
+Dmitri Ivanovich Mendeleev proposed the Periodic Table in 1869.
+
+He arranged elements in increasing order of their atomic masses.
+
+MENDELEEV'S PERIODIC LAW:
+
+"The properties of elements are a periodic function of their atomic masses."
+
+Meaning:
+
+When elements are arranged in increasing order of atomic masses, their properties repeat after certain intervals.
+
+==================================================
+
+7. ACHIEVEMENTS OF MENDELEEV'S PERIODIC TABLE 🏆
+
+1. Elements with similar properties were placed in the same group.
+
+2. He left gaps for undiscovered elements.
+
+3. He predicted the properties of undiscovered elements.
+
+4. New elements discovered later fitted into the gaps.
+
+Example:
+
+Mendeleev predicted an element called "eka-aluminium".
+
+Later, it was discovered as Gallium.
+
+==================================================
+
+8. LIMITATIONS OF MENDELEEV'S PERIODIC TABLE ⚠️
+
+1. Position of hydrogen was not fixed properly.
+
+2. Isotopes could not be given separate positions.
+
+3. Some elements had to be placed in an order that did not strictly follow atomic mass.
+
+Example:
+
+Cobalt and Nickel.
+
+Cobalt atomic mass ≈ 58.9
+Nickel atomic mass ≈ 58.7
+
+Yet their order was based on properties.
+
+==================================================
+
+SAMPLE PAPER QUESTION 📝
+
+Q. Write any two achievements of Mendeleev's Periodic Table.
+
+ANSWER:
+
+1. Mendeleev left gaps for undiscovered elements.
+2. He predicted the properties of elements that had not yet been discovered.
+
+==================================================
+
+9. MODERN PERIODIC LAW 🔬
+
+Modern Periodic Law was given by Henry Moseley.
+
+MODERN PERIODIC LAW:
+
+"The properties of elements are a periodic function of their atomic numbers."
+
+IMPORTANT:
+
+Mendeleev → Atomic Mass
+
+Modern Periodic Table → Atomic Number
+
+==================================================
+
+10. MODERN PERIODIC TABLE 📊
+
+Modern Periodic Table contains:
+
+18 Groups
+7 Periods
+
+Groups = Vertical columns
+
+Periods = Horizontal rows
+
+==================================================
+
+11. GROUPS 📌
+
+There are 18 vertical columns called Groups.
+
+Elements in the same group generally have similar chemical properties because they have the same number of valence electrons.
+
+Example:
+
+Group 1:
+
+Li
+Na
+K
+
+All have 1 valence electron.
+
+==================================================
+
+12. PERIODS 📌
+
+There are 7 horizontal rows called Periods.
+
+The period number tells the number of electron shells present in the atom.
+
+Example:
+
+Period 2 elements have 2 electron shells.
+
+Period 3 elements have 3 electron shells.
+
+==================================================
+
+13. VALENCE ELECTRONS ⚡
+
+Electrons present in the outermost shell are called valence electrons.
+
+Example:
+
+Sodium:
+
+Electronic configuration:
+
+2, 8, 1
+
+Valence electrons = 1
+
+Chlorine:
+
+2, 8, 7
+
+Valence electrons = 7
+
+==================================================
+
+14. VALENCY ⭐
+
+The combining capacity of an element is called its valency.
+
+For elements having 1, 2, 3 or 4 valence electrons:
+
+Valency = Number of valence electrons
+
+For elements having more than 4 valence electrons:
+
+Valency = 8 - Number of valence electrons
+
+Examples:
+
+Na = 2,8,1
+
+Valency = 1
+
+Mg = 2,8,2
+
+Valency = 2
+
+Al = 2,8,3
+
+Valency = 3
+
+C = 2,4
+
+Valency = 4
+
+N = 2,5
+
+Valency = 3
+
+O = 2,6
+
+Valency = 2
+
+Cl = 2,8,7
+
+Valency = 1
+
+Ne = 2,8
+
+Valency = 0
+
+==================================================
+
+SAMPLE PAPER QUESTION 📝
+
+Q. An element has electronic configuration 2,8,7.
+
+(a) Find its valency.
+(b) Identify its group.
+(c) Identify its period.
+
+ANSWER:
+
+Electronic configuration = 2,8,7
+
+(a) Valency = 1
+
+(b) Group = 17
+
+(c) Period = 3
+
+==================================================
+
+15. POSITION OF ELEMENTS IN PERIODIC TABLE 🧠
+
+To find PERIOD:
+
+Number of occupied electron shells = Period number.
+
+Example:
+
+Na = 2,8,1
+
+Number of shells = 3
+
+Therefore:
+
+Period = 3
+
+To find GROUP for main-group elements:
+
+Group 1 and 2:
+Valence electrons = group number.
+
+Groups 13 to 18:
+Group number = 10 + valence electrons.
+
+Example:
+
+Cl = 2,8,7
+
+Valence electrons = 7
+
+Group = 10 + 7 = 17
+
+==================================================
+
+16. TRENDS IN THE MODERN PERIODIC TABLE 📈
+
+Important trends:
+
+1. Atomic size
+2. Metallic character
+3. Non-metallic character
+4. Valency
+
+==================================================
+
+17. ATOMIC SIZE 📏
+
+Atomic size means the distance between the centre of the nucleus and the outermost shell of an atom.
+
+TREND:
+
+Across a period → Atomic size DECREASES
+
+Down a group → Atomic size INCREASES
+
+Why?
+
+Across a period:
+Nuclear charge increases, so electrons are pulled more strongly towards the nucleus.
+
+Down a group:
+New electron shells are added, increasing the size of the atom.
+
+==================================================
+
+SAMPLE PAPER QUESTION 📝
+
+Q. Why does atomic size decrease from left to right in a period?
+
+ANSWER:
+
+Atomic size decreases from left to right because nuclear charge increases while electrons are added to the same shell. The stronger nuclear attraction pulls the electrons closer to the nucleus.
+
+==================================================
+
+18. METALLIC CHARACTER 🔩
+
+Metallic character means the tendency of an atom to lose electrons.
+
+TREND:
+
+Across a period → Metallic character DECREASES
+
+Down a group → Metallic character INCREASES
+
+Example:
+
+Na is more metallic than Mg.
+
+==================================================
+
+19. NON-METALLIC CHARACTER 🧪
+
+Non-metallic character means the tendency of an atom to gain electrons.
+
+TREND:
+
+Across a period → Non-metallic character INCREASES
+
+Down a group → Non-metallic character DECREASES
+
+Example:
+
+Chlorine is more non-metallic than sodium.
+
+==================================================
+
+20. VALENCY TREND ⚡
+
+Across a period:
+
+Valency first increases from 1 to 4 and then decreases from 4 to 0.
+
+Example:
+
+Na = 1
+Mg = 2
+Al = 3
+Si = 4
+P = 3
+S = 2
+Cl = 1
+Ar = 0
+
+Down a group:
+
+Valency generally remains the same.
+
+Example:
+
+Li = 1
+Na = 1
+K = 1
+
+==================================================
+
+21. NOBLE GASES 🎈
+
+Noble gases are placed in Group 18.
+
+Examples:
+
+He
+Ne
+Ar
+Kr
+Xe
+Rn
+
+They have completely filled outermost shells.
+
+Therefore, they are generally chemically unreactive.
+
+Helium has 2 electrons in its outer shell.
+
+Other noble gases generally have 8 valence electrons.
+
+==================================================
+
+22. REACTIVITY OF METALS 🔥
+
+For metals:
+
+Reactivity generally INCREASES down a group.
+
+Example:
+
+Li < Na < K
+
+Potassium is more reactive than sodium.
+
+==================================================
+
+23. REACTIVITY OF NON-METALS ⚡
+
+For non-metals:
+
+Reactivity generally DECREASES down a group.
+
+Example:
+
+F > Cl > Br > I
+
+Fluorine is more reactive than chlorine.
+
+==================================================
+
+24. WHY DO ELEMENTS SHOW SIMILAR CHEMICAL PROPERTIES? 🔬
+
+Elements in the same group have the same number of valence electrons.
+
+Therefore, they generally show similar chemical properties.
+
+Example:
+
+Li = 2,1
+Na = 2,8,1
+K = 2,8,8,1
+
+All have 1 valence electron.
+
+Therefore, Li, Na and K have similar chemical properties.
+
+==================================================
+
+SAMPLE PAPER QUESTION 📝
+
+Q. Why do elements in the same group have similar chemical properties?
+
+ANSWER:
+
+Elements in the same group have the same number of valence electrons. Since chemical properties mainly depend on valence electrons, they show similar chemical properties.
+
+==================================================
+
+25. IMPORTANT GROUPS ⭐
+
+Group 1:
+Alkali metals
+
+Examples:
+Li, Na, K
+
+Valency = 1
+
+Group 2:
+Alkaline earth metals
+
+Examples:
+Be, Mg, Ca
+
+Valency = 2
+
+Group 17:
+Halogens
+
+Examples:
+F, Cl, Br, I
+
+Valency = 1
+
+Group 18:
+Noble gases
+
+Examples:
+He, Ne, Ar
+
+Valency = 0
+
+==================================================
+
+26. HYDROGEN'S POSITION ⚠️
+
+Hydrogen has a unique position in the periodic table.
+
+Hydrogen has 1 valence electron like Group 1 elements.
+
+But it can also gain one electron like Group 17 elements.
+
+Therefore, hydrogen shows similarities with both.
+
+==================================================
+
+27. ISOTOPES AND PERIODIC TABLE 🧬
+
+Isotopes have:
+
+Same atomic number
+Different mass numbers
+
+Example:
+
+Hydrogen isotopes:
+
+Protium = 1H
+Deuterium = 2H
+Tritium = 3H
+
+They occupy the same position because they have the same atomic number.
+
+==================================================
+
+28. IMPORTANT DIFFERENCE 📚
+
+MENDELEEV'S PERIODIC TABLE vs MODERN PERIODIC TABLE
+
+Mendeleev:
+
+1. Based on atomic mass.
+2. Proposed in 1869.
+3. Had 8 groups.
+4. Isotopes could not be placed properly.
+
+Modern:
+
+1. Based on atomic number.
+2. Has 18 groups.
+3. Has 7 periods.
+4. Isotopes occupy the same position.
+
+==================================================
+
+29. IMPORTANT QUESTIONS FOR SAMPLE PAPER 📝
+
+Q1. State the modern periodic law.
+
+Answer:
+
+The properties of elements are a periodic function of their atomic numbers.
+
+--------------------------------------------------
+
+Q2. How many groups and periods are present in the modern periodic table?
+
+Answer:
+
+There are 18 groups and 7 periods.
+
+--------------------------------------------------
+
+Q3. What happens to atomic size across a period?
+
+Answer:
+
+Atomic size generally decreases from left to right across a period.
+
+--------------------------------------------------
+
+Q4. What happens to atomic size down a group?
+
+Answer:
+
+Atomic size generally increases down a group.
+
+--------------------------------------------------
+
+Q5. What happens to metallic character across a period?
+
+Answer:
+
+Metallic character decreases from left to right across a period.
+
+--------------------------------------------------
+
+Q6. What happens to metallic character down a group?
+
+Answer:
+
+Metallic character increases down a group.
+
+--------------------------------------------------
+
+Q7. An element has electronic configuration 2,8,2. Find its group and period.
+
+Answer:
+
+Electronic configuration = 2,8,2
+
+Number of shells = 3
+
+Therefore:
+
+Period = 3
+
+Valence electrons = 2
+
+Group = 2
+
+--------------------------------------------------
+
+Q8. An element has electronic configuration 2,8,7. Identify the element.
+
+Answer:
+
+Atomic number = 17
+
+Element = Chlorine (Cl)
+
+Group = 17
+
+Period = 3
+
+Valency = 1
+
+--------------------------------------------------
+
+Q9. Why are noble gases chemically unreactive?
+
+Answer:
+
+Noble gases have completely filled outermost electron shells. Therefore, they have very little tendency to gain or lose electrons.
+
+--------------------------------------------------
+
+Q10. Why does metallic character decrease across a period?
+
+Answer:
+
+Across a period, nuclear charge increases and the atomic size decreases. Therefore, the tendency to lose electrons decreases, so metallic character decreases.
+
+==================================================
+
+30. CASE-BASED SAMPLE PAPER QUESTION 📝🔥
+
+Q. An element X has electronic configuration 2,8,1.
+
+(a) Identify X.
+(b) Find its group.
+(c) Find its period.
+(d) What is its valency?
+(e) Is it a metal or non-metal?
+
+ANSWER:
+
+(a) X = Sodium (Na)
+
+(b) Group = 1
+
+(c) Period = 3
+
+(d) Valency = 1
+
+(e) It is a metal.
+
+==================================================
+
+31. ASSERTION-REASON TYPE QUESTION 🧠
+
+Assertion:
+Atomic size decreases across a period.
+
+Reason:
+Nuclear charge increases across the period.
+
+Answer:
+
+Both Assertion and Reason are true, and Reason correctly explains the Assertion.
+
+==================================================
+
+32. QUICK REVISION 🚀
+
+Dobereiner:
+Triads of 3 elements.
+
+Newlands:
+Law of Octaves.
+
+Mendeleev:
+Periodic table based on atomic mass.
+
+Moseley:
+Modern periodic table based on atomic number.
+
+Modern Periodic Table:
+18 Groups + 7 Periods.
+
+Across a period:
+
+Atomic size ↓
+Metallic character ↓
+Non-metallic character ↑
+
+Down a group:
+
+Atomic size ↑
+Metallic character ↑
+Non-metallic character ↓
+
+Group 1:
+Alkali metals
+
+Group 17:
+Halogens
+
+Group 18:
+Noble gases
+
+==================================================
+
+33. MOST IMPORTANT FOR CBSE BOARD 🎯
+
+1. Dobereiner's Triads
+2. Newlands' Law of Octaves
+3. Mendeleev's Periodic Table
+4. Limitations of Mendeleev's Table
+5. Modern Periodic Law
+6. Groups and Periods
+7. Electronic configuration
+8. Finding group and period
+9. Valency
+10. Atomic size trend
+11. Metallic character
+12. Non-metallic character
+13. Noble gases
+14. Reactivity trends
+15. Hydrogen's position
+16. Isotopes
+17. Case-based questions
+18. Assertion-Reason questions
+19. Numerical/logic-based questions on electronic configuration
+
+==================================================
+
+34. SUPER SHORT FORMULA/TRICK 🧠
+
+Period = Number of electron shells
+
+For Group 1 and 2:
+Group = Valence electrons
+
+For Groups 13-18:
+Group = 10 + Valence electrons
+
+Across period:
+
+Atomic size ↓
+Metallic character ↓
+Non-metallic character ↑
+
+Down group:
+
+Atomic size ↑
+Metallic character ↑
+Non-metallic character ↓
+
+Mendeleev → Atomic Mass
+
+Modern → Atomic Number
+
+==================================================
+
+END OF CHAPTER 5 ✅
+    </h5>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 5 — Life Processes</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="topic">
+
+<h4>Life Processes</h4>
+
+<ul>
+<li>Nutrition</li>
+<li>Respiration</li>
+<li>Transportation</li>
+<li>Excretion</li>
+<li>Photosynthesis</li>
+<li>Human Digestive System</li>
+<li>Human Respiratory System</li>
+<li>Circulatory System</li>
+</ul> 
+    <h5>CLASS 10 SCIENCE
+BIOLOGY - CHAPTER 1
+LIFE PROCESSES
+FULL NOTES + SAMPLE PAPER QUESTIONS
+
+==================================================
+
+1. LIFE PROCESSES 🧬
+
+Life processes are the basic activities performed by living organisms to maintain life.
+
+Main life processes:
+
+1. Nutrition 🍎
+2. Respiration 🫁
+3. Transportation ❤️
+4. Excretion 🚽
+
+==================================================
+
+2. NUTRITION 🍎
+
+Nutrition is the process by which organisms obtain food and use it for energy, growth and repair.
+
+There are two main types:
+
+1. Autotrophic Nutrition
+2. Heterotrophic Nutrition
+
+==================================================
+
+3. AUTOTROPHIC NUTRITION 🌱
+
+Organisms which prepare their own food from simple substances are called autotrophs.
+
+Example:
+
+Green plants 🌿
+
+Plants prepare food by photosynthesis.
+
+Requirements:
+
+1. Carbon dioxide
+2. Water
+3. Sunlight
+4. Chlorophyll
+
+Photosynthesis equation:
+
+6CO2 + 6H2O
+--sunlight/chlorophyll-->
+C6H12O6 + 6O2
+
+Carbon dioxide + Water → Glucose + Oxygen
+
+==================================================
+
+4. PHOTOSYNTHESIS ☀️🌿
+
+Photosynthesis is the process by which green plants prepare food using carbon dioxide and water in the presence of sunlight and chlorophyll.
+
+Steps:
+
+1. Absorption of sunlight by chlorophyll.
+2. Conversion of light energy into chemical energy.
+3. Splitting of water molecules.
+4. Reduction of carbon dioxide into carbohydrates.
+
+==================================================
+
+5. HOW DO PLANTS GET CO2? 🌿
+
+Plants take CO2 from the atmosphere through tiny pores called STOMATA.
+
+Stomata are mainly present on the surface of leaves.
+
+Stomata are controlled by GUARD CELLS.
+
+When guard cells swell:
+Stoma opens.
+
+When guard cells shrink:
+Stoma closes.
+
+==================================================
+
+SAMPLE PAPER QUESTION 📝
+
+Q. What is the role of stomata in plants?
+
+ANSWER:
+
+Stomata help in the exchange of gases. They allow carbon dioxide to enter the leaf and oxygen to go out. They also help in transpiration.
+
+==================================================
+
+6. HETEROTROPHIC NUTRITION 🍽️
+
+Organisms which cannot prepare their own food and depend on other organisms are called heterotrophs.
+
+Examples:
+
+Humans
+Animals
+Fungi
+Many bacteria
+
+Types:
+
+1. Holozoic nutrition
+2. Saprophytic nutrition
+3. Parasitic nutrition
+
+==================================================
+
+7. HUMAN DIGESTION 👨‍🔬
+
+The human digestive system consists of:
+
+1. Mouth
+2. Oesophagus
+3. Stomach
+4. Small intestine
+5. Large intestine
+6. Rectum
+7. Anus
+
+Associated glands:
+
+1. Salivary glands
+2. Liver
+3. Pancreas
+
+==================================================
+
+8. DIGESTION IN MOUTH 👄
+
+Food is chewed by teeth.
+
+Saliva is secreted by salivary glands.
+
+Saliva contains an enzyme called SALIVARY AMYLASE.
+
+It begins the digestion of starch.
+
+Starch → Simple sugars
+
+==================================================
+
+9. OESOPHAGUS 🥣
+
+Food moves from mouth to stomach through the oesophagus.
+
+The movement is caused by rhythmic muscular contractions called PERISTALSIS.
+
+==================================================
+
+10. DIGESTION IN STOMACH 🥣
+
+Stomach produces:
+
+1. Hydrochloric acid (HCl)
+2. Pepsin
+3. Mucus
+
+HCl:
+Creates acidic medium.
+
+Pepsin:
+Helps digest proteins.
+
+Mucus:
+Protects the stomach lining from acid.
+
+==================================================
+
+11. DIGESTION IN SMALL INTESTINE 🧪
+
+Most digestion and absorption occurs in the small intestine.
+
+LIVER produces BILE.
+
+Bile:
+
+1. Makes the acidic food alkaline.
+2. Breaks large fat globules into smaller droplets.
+
+This process is called EMULSIFICATION.
+
+PANCREAS produces pancreatic juice.
+
+It contains enzymes that digest:
+
+1. Carbohydrates
+2. Proteins
+3. Fats
+
+==================================================
+
+12. ABSORPTION OF FOOD 🩸
+
+Small intestine has finger-like projections called VILLI.
+
+Villi increase the surface area for absorption.
+
+Digested nutrients are absorbed into the blood through villi.
+
+==================================================
+
+SAMPLE PAPER QUESTION 📝
+
+Q. Why does the small intestine have villi?
+
+ANSWER:
+
+The small intestine has villi to increase the surface area for absorption of digested food.
+
+==================================================
+
+13. LARGE INTESTINE
+
+The large intestine absorbs water and some salts from undigested food.
+
+The remaining waste is stored in the rectum and removed through the anus.
+
+==================================================
+
+14. RESPIRATION 🫁
+
+Respiration is the process in which food is broken down to release energy.
+
+Main types:
+
+1. Aerobic respiration
+2. Anaerobic respiration
+
+==================================================
+
+15. AEROBIC RESPIRATION 🫁
+
+Respiration that occurs in the presence of oxygen is called aerobic respiration.
+
+Glucose + Oxygen → Carbon dioxide + Water + Energy
+
+Equation:
+
+C6H12O6 + 6O2 → 6CO2 + 6H2O + Energy
+
+It mainly occurs in mitochondria.
+
+==================================================
+
+16. ANAEROBIC RESPIRATION 🦠
+
+Respiration that occurs without oxygen is called anaerobic respiration.
+
+Example in yeast:
+
+Glucose → Ethanol + CO2 + Energy
+
+Equation:
+
+C6H12O6 → 2C2H5OH + 2CO2 + Energy
+
+==================================================
+
+17. RESPIRATION IN MUSCLES 🏃
+
+During heavy exercise, muscles may not get enough oxygen.
+
+Then:
+
+Glucose → Lactic acid + Energy
+
+Lactic acid accumulation can cause muscle cramps.
+
+==================================================
+
+18. ATP - ENERGY CURRENCY ⚡
+
+ATP stands for:
+
+Adenosine Triphosphate
+
+ATP stores and supplies energy for cellular activities.
+
+ATP is often called the energy currency of the cell.
+
+==================================================
+
+19. HUMAN RESPIRATORY SYSTEM 🫁
+
+Main parts:
+
+1. Nostrils
+2. Nasal passage
+3. Pharynx
+4. Larynx
+5. Trachea
+6. Bronchi
+7. Bronchioles
+8. Alveoli
+9. Lungs
+
+==================================================
+
+20. ALVEOLI 🫁
+
+Alveoli are tiny balloon-like structures present inside the lungs.
+
+Functions:
+
+1. Increase surface area for gas exchange.
+2. Exchange oxygen and carbon dioxide.
+
+Alveoli have:
+
+1. Thin walls
+2. Rich blood supply
+3. Large surface area
+
+==================================================
+
+SAMPLE PAPER QUESTION 📝
+
+Q. How are alveoli designed to maximise the exchange of gases?
+
+ANSWER:
+
+Alveoli have thin walls, a large surface area and a rich network of blood capillaries. These features make gas exchange efficient.
+
+==================================================
+
+21. TRANSPORTATION IN HUMAN BEINGS ❤️
+
+Transportation is necessary to carry:
+
+1. Oxygen
+2. Food
+3. Hormones
+4. Carbon dioxide
+5. Waste materials
+
+The circulatory system consists mainly of:
+
+1. Heart
+2. Blood
+3. Blood vessels
+
+==================================================
+
+22. HUMAN HEART ❤️
+
+The human heart has four chambers:
+
+1. Right atrium
+2. Right ventricle
+3. Left atrium
+4. Left ventricle
+
+The heart pumps blood throughout the body.
+
+==================================================
+
+23. DOUBLE CIRCULATION ❤️🔄
+
+In humans, blood passes through the heart twice during one complete cycle.
+
+Two pathways:
+
+1. Pulmonary circulation
+2. Systemic circulation
+
+Pulmonary circulation:
+
+Heart → Lungs → Heart
+
+Systemic circulation:
+
+Heart → Body → Heart
+
+==================================================
+
+24. WHY IS DOUBLE CIRCULATION IMPORTANT? ❤️
+
+Double circulation keeps oxygenated and deoxygenated blood largely separate.
+
+It allows efficient supply of oxygen to the body.
+
+==================================================
+
+25. BLOOD 🩸
+
+Blood consists of:
+
+1. Plasma
+2. Red blood cells
+3. White blood cells
+4. Platelets
+
+==================================================
+
+26. RED BLOOD CELLS 🔴
+
+RBCs contain haemoglobin.
+
+Function:
+
+Transport oxygen.
+
+==================================================
+
+27. WHITE BLOOD CELLS ⚪
+
+WBCs help protect the body from infections and disease-causing organisms.
+
+==================================================
+
+28. PLATELETS 🩸
+
+Platelets help in blood clotting.
+
+They prevent excessive blood loss after an injury.
+
+==================================================
+
+29. BLOOD VESSELS 🩸
+
+Three main types:
+
+1. Arteries
+2. Veins
+3. Capillaries
+
+ARTERIES:
+
+Carry blood away from the heart.
+
+VEINS:
+
+Carry blood towards the heart.
+
+CAPILLARIES:
+
+Very thin vessels where exchange of substances occurs.
+
+==================================================
+
+30. TRANSPORTATION IN PLANTS 🌱
+
+Plants transport:
+
+1. Water
+2. Minerals
+3. Food
+
+Two important tissues:
+
+Xylem
+Phloem
+
+==================================================
+
+31. XYLEM 💧
+
+Xylem transports:
+
+Water + Minerals
+
+Direction:
+
+Mainly from roots → stems → leaves
+
+==================================================
+
+32. PHLOEM 🍃
+
+Phloem transports:
+
+Food prepared by leaves.
+
+Food can be transported from leaves to different parts of the plant.
+
+This process is called TRANSLOCATION.
+
+==================================================
+
+33. TRANSPIRATION 💧🌿
+
+Loss of water in the form of water vapour from aerial parts of plants is called transpiration.
+
+It mainly occurs through stomata.
+
+Importance:
+
+1. Creates transpiration pull.
+2. Helps in transport of water and minerals.
+3. Helps cool the plant.
+
+==================================================
+
+34. EXCRETION 🚽
+
+Excretion is the process of removal of metabolic wastes from the body.
+
+Examples of wastes:
+
+1. CO2
+2. Urea
+3. Excess water
+4. Excess salts
+
+==================================================
+
+35. HUMAN EXCRETORY SYSTEM 🧪
+
+Main parts:
+
+1. Kidneys
+2. Ureters
+3. Urinary bladder
+4. Urethra
+
+==================================================
+
+36. KIDNEYS 🫘
+
+Kidneys filter the blood and remove nitrogenous wastes.
+
+Main nitrogenous waste in humans:
+
+Urea
+
+Kidneys also help maintain water and salt balance.
+
+==================================================
+
+37. NEPHRON 🔬
+
+Nephron is the structural and functional unit of kidney.
+
+Main parts:
+
+1. Glomerulus
+2. Bowman's capsule
+3. Tubule
+
+Functions:
+
+1. Filtration
+2. Selective reabsorption
+3. Removal of wastes
+
+==================================================
+
+38. URINE FORMATION 🚽
+
+Urine formation involves:
+
+1. Filtration
+2. Selective reabsorption
+3. Secretion
+
+Filtered useful substances such as glucose, amino acids and required water are reabsorbed into the blood.
+
+Remaining waste forms urine.
+
+==================================================
+
+39. EXCRETION IN PLANTS 🌿
+
+Plants remove wastes through:
+
+1. Stomata
+2. Lenticels
+3. Diffusion
+4. Storage in leaves
+5. Storage as resins and gums
+6. Shedding of leaves
+
+==================================================
+
+40. IMPORTANT DIFFERENCES 📚
+
+AEROBIC vs ANAEROBIC RESPIRATION
+
+Aerobic:
+
+1. Oxygen required.
+2. Complete breakdown of glucose.
+3. CO2 and water produced.
+4. More energy released.
+
+Anaerobic:
+
+1. Oxygen not required.
+2. Incomplete breakdown.
+3. Ethanol + CO2 in yeast OR lactic acid in muscles.
+4. Less energy released.
+
+==================================================
+
+41. XYLEM vs PHLOEM 🌱
+
+Xylem:
+
+1. Transports water and minerals.
+2. Mainly upward movement.
+3. Mostly made of dead conducting elements.
+
+Phloem:
+
+1. Transports food.
+2. Movement can occur in both directions depending on source and sink.
+3. Mainly made of living cells.
+
+==================================================
+
+42. ARTERY vs VEIN ❤️
+
+Artery:
+
+1. Carries blood away from heart.
+2. Thick and elastic walls.
+3. Generally carries oxygenated blood.
+4. Blood flows under high pressure.
+
+Vein:
+
+1. Carries blood towards heart.
+2. Thin walls.
+3. Generally carries deoxygenated blood.
+4. Contains valves.
+
+IMPORTANT EXCEPTION:
+
+Pulmonary artery carries deoxygenated blood.
+
+Pulmonary vein carries oxygenated blood.
+
+==================================================
+
+43. IMPORTANT DIAGRAMS TO PRACTISE ✏️
+
+1. Human digestive system
+2. Human respiratory system
+3. Human heart
+4. Human excretory system
+5. Nephron
+6. Stomata
+7. Alveoli
+
+==================================================
+
+44. SAMPLE PAPER QUESTIONS 📝🔥
+
+Q1. What are life processes?
+
+ANSWER:
+
+Life processes are the basic activities performed by living organisms to maintain life, such as nutrition, respiration, transportation and excretion.
+
+--------------------------------------------------
+
+Q2. Write the equation of photosynthesis.
+
+ANSWER:
+
+6CO2 + 6H2O
+--sunlight/chlorophyll-->
+C6H12O6 + 6O2
+
+--------------------------------------------------
+
+Q3. What is the function of saliva?
+
+ANSWER:
+
+Saliva moistens food and contains salivary amylase, which begins the digestion of starch.
+
+--------------------------------------------------
+
+Q4. What is the role of hydrochloric acid in the stomach?
+
+ANSWER:
+
+HCl provides an acidic medium for the action of pepsin and also helps kill many harmful microorganisms present in food.
+
+--------------------------------------------------
+
+Q5. Why is bile important in digestion?
+
+ANSWER:
+
+Bile makes the acidic food coming from the stomach alkaline and emulsifies fats into smaller droplets.
+
+--------------------------------------------------
+
+Q6. What is the function of villi?
+
+ANSWER:
+
+Villi increase the surface area of the small intestine and help in efficient absorption of digested nutrients.
+
+--------------------------------------------------
+
+Q7. Write the equation of aerobic respiration.
+
+ANSWER:
+
+C6H12O6 + 6O2 → 6CO2 + 6H2O + Energy
+
+--------------------------------------------------
+
+Q8. What happens during anaerobic respiration in yeast?
+
+ANSWER:
+
+Glucose is converted into ethanol, carbon dioxide and energy.
+
+C6H12O6 → 2C2H5OH + 2CO2 + Energy
+
+--------------------------------------------------
+
+Q9. Why do muscles develop cramps during heavy exercise?
+
+ANSWER:
+
+During heavy exercise, oxygen supply to muscles may become insufficient. Muscles then carry out anaerobic respiration, producing lactic acid. Accumulation of lactic acid may cause cramps.
+
+--------------------------------------------------
+
+Q10. What is double circulation?
+
+ANSWER:
+
+The movement of blood through the heart twice during one complete cycle is called double circulation.
+
+--------------------------------------------------
+
+Q11. What is the function of haemoglobin?
+
+ANSWER:
+
+Haemoglobin in red blood cells binds with oxygen and helps transport oxygen from the lungs to body tissues.
+
+--------------------------------------------------
+
+Q12. What is transpiration?
+
+ANSWER:
+
+The loss of water in the form of water vapour from the aerial parts of plants, mainly through stomata, is called transpiration.
+
+--------------------------------------------------
+
+Q13. What is the function of xylem?
+
+ANSWER:
+
+Xylem transports water and minerals from roots to the aerial parts of the plant.
+
+--------------------------------------------------
+
+Q14. What is the function of phloem?
+
+ANSWER:
+
+Phloem transports food prepared by leaves to different parts of the plant.
+
+--------------------------------------------------
+
+Q15. What is a nephron?
+
+ANSWER:
+
+Nephron is the structural and functional unit of the kidney.
+
+--------------------------------------------------
+
+Q16. How is urine formed?
+
+ANSWER:
+
+Urine is formed by filtration of blood followed by selective reabsorption and secretion in the nephron.
+
+==================================================
+
+45. CASE-BASED QUESTION 🧠🔥
+
+A student observed that a plant kept in sunlight produces food in its leaves.
+
+Questions:
+
+(a) Which process is responsible?
+
+(b) Which pigment is required?
+
+(c) Which gas is taken in?
+
+(d) Which gas is released?
+
+ANSWER:
+
+(a) Photosynthesis
+
+(b) Chlorophyll
+
+(c) Carbon dioxide
+
+(d) Oxygen
+
+==================================================
+
+46. ASSERTION-REASON QUESTION 📝
+
+Assertion:
+
+Small intestine is the main site of absorption of digested food.
+
+Reason:
+
+Small intestine has numerous villi that increase the surface area for absorption.
+
+ANSWER:
+
+Both Assertion and Reason are true, and Reason correctly explains the Assertion.
+
+==================================================
+
+47. ONE-SHOT REVISION 🚀
+
+Life Processes:
+
+Nutrition
+Respiration
+Transportation
+Excretion
+
+Photosynthesis:
+
+CO2 + H2O → Glucose + O2
+
+Aerobic respiration:
+
+Glucose + O2 → CO2 + H2O + Energy
+
+Anaerobic respiration in yeast:
+
+Glucose → Ethanol + CO2 + Energy
+
+Xylem:
+
+Water + Minerals
+
+Phloem:
+
+Food
+
+RBC:
+
+Oxygen transport
+
+WBC:
+
+Protection from infection
+
+Platelets:
+
+Blood clotting
+
+Kidney:
+
+Filters blood and forms urine
+
+Nephron:
+
+Functional unit of kidney
+
+==================================================
+
+48. MOST IMPORTANT FOR CBSE BOARD 🎯
+
+1. Photosynthesis
+2. Stomata
+3. Human digestive system
+4. Role of HCl, pepsin and bile
+5. Villi
+6. Aerobic and anaerobic respiration
+7. Respiration equation
+8. Human respiratory system
+9. Alveoli
+10. Human heart
+11. Double circulation
+12. Blood components
+13. Xylem and phloem
+14. Transpiration
+15. Human excretory system
+16. Nephron
+17. Urine formation
+18. Important diagrams
+19. Case-based questions
+20. Assertion-Reason questions
+
+==================================================
+
+END OF CHAPTER 1
+LIFE PROCESSES ✅🧬
+    </h5>
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 6 — Control and Coordination</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Neuron</li>
+<li>Brain</li>
+<li>Spinal Cord</li>
+<li>Reflex Action</li>
+<li>Plant Hormones</li>
+<li>Animal Hormones</li>
+<li>Human Nervous System</li>
+</ul> 
+    <h5> CLASS 10 SCIENCE
+BIOLOGY - CHAPTER 2
+CONTROL AND COORDINATION
+FULL NOTES + COMPETENCY QUESTIONS
+
+==================================================
+
+1. CONTROL AND COORDINATION 🧠
+
+Living organisms need to control and coordinate different activities of their body.
+
+Control and coordination help organisms to:
+
+1. Respond to changes in surroundings.
+2. Coordinate different body parts.
+3. Perform different activities properly.
+4. Maintain proper functioning of the body.
+
+In animals, control and coordination mainly occur through:
+
+1. Nervous system 🧠
+2. Hormonal system 🧪
+
+In plants, coordination occurs mainly through:
+
+1. Plant hormones
+2. Growth movements
+
+==================================================
+
+2. NERVOUS SYSTEM 🧠
+
+The nervous system controls and coordinates activities using electrical signals called nerve impulses.
+
+Main parts:
+
+1. Brain
+2. Spinal cord
+3. Peripheral nerves
+
+==================================================
+
+3. NEURON 🔬
+
+Neuron is the structural and functional unit of the nervous system.
+
+Main parts of a neuron:
+
+1. Dendrites
+2. Cell body
+3. Axon
+4. Nerve endings
+
+Dendrites:
+Receive information.
+
+Cell body:
+Contains nucleus and controls cell activities.
+
+Axon:
+Carries nerve impulses away from the cell body.
+
+Nerve endings:
+Pass the impulse to another neuron or muscle/gland.
+
+==================================================
+
+4. HOW DOES A NERVOUS IMPULSE TRAVEL? ⚡
+
+Stimulus
+↓
+Receptor
+↓
+Sensory neuron
+↓
+Central nervous system
+↓
+Motor neuron
+↓
+Effector
+↓
+Response
+
+Example:
+
+Touching a hot object 🔥
+
+Hot object
+↓
+Receptors in skin
+↓
+Sensory neuron
+↓
+Spinal cord
+↓
+Motor neuron
+↓
+Muscles of hand
+↓
+Hand moves away
+
+==================================================
+
+COMPETENCY QUESTION 🧠📝
+
+Q. A student accidentally touches a hot pan and immediately pulls his hand away.
+
+Answer the following:
+
+(a) Which type of response is this?
+
+(b) Which part of the nervous system controls the immediate response?
+
+(c) Which neuron carries information from the skin to the CNS?
+
+ANSWER:
+
+(a) Reflex action
+
+(b) Spinal cord
+
+(c) Sensory neuron
+
+==================================================
+
+5. REFLEX ACTION ⚡
+
+A quick, automatic and involuntary response to a stimulus is called reflex action.
+
+Examples:
+
+1. Pulling hand away from a hot object.
+2. Blinking of eyes.
+3. Sneezing.
+4. Coughing.
+5. Knee-jerk response.
+
+Reflex action usually occurs through a REFLEX ARC.
+
+==================================================
+
+6. REFLEX ARC 🔄
+
+The pathway followed by a nerve impulse during a reflex action is called reflex arc.
+
+Path:
+
+Receptor
+↓
+Sensory neuron
+↓
+Spinal cord
+↓
+Motor neuron
+↓
+Effector
+
+==================================================
+
+7. WHY ARE REFLEX ACTIONS FAST? ⚡
+
+Reflex actions are fast because the response is mainly coordinated through the spinal cord instead of waiting for conscious processing by the brain.
+
+==================================================
+
+COMPETENCY QUESTION 🧠
+
+Q. Why does a person remove his hand immediately after touching a hot object instead of thinking about it first?
+
+ANSWER:
+
+The response is a reflex action. The nerve impulse is rapidly coordinated through the spinal cord, allowing the hand to be withdrawn quickly.
+
+==================================================
+
+8. HUMAN BRAIN 🧠
+
+The brain is the main coordinating centre of the nervous system.
+
+It is protected by:
+
+1. Skull
+2. Meninges
+3. Cerebrospinal fluid
+
+Main parts:
+
+1. Forebrain
+2. Midbrain
+3. Hindbrain
+
+==================================================
+
+9. FOREBRAIN 🧠
+
+Forebrain is the main thinking part of the brain.
+
+Functions:
+
+1. Thinking
+2. Reasoning
+3. Memory
+4. Intelligence
+5. Voluntary actions
+6. Interpreting sensory information
+
+Different areas receive information from:
+
+Eyes → Vision
+Ears → Hearing
+Nose → Smell
+Tongue → Taste
+Skin → Touch
+
+==================================================
+
+10. MIDBRAIN
+
+Midbrain controls some reflex movements involving:
+
+1. Eyes
+2. Ears
+
+==================================================
+
+11. HINDBRAIN
+
+Hindbrain consists mainly of:
+
+1. Cerebellum
+2. Medulla
+3. Pons
+
+Cerebellum:
+
+Controls balance and coordination of muscular movements.
+
+Medulla:
+
+Controls involuntary activities such as:
+
+1. Breathing
+2. Heartbeat
+3. Blood pressure
+4. Swallowing
+
+Pons:
+
+Helps regulate breathing and connects different parts of the brain.
+
+==================================================
+
+COMPETENCY QUESTION 🧠📝
+
+Q. A person can think normally but has difficulty maintaining body balance and performing precise movements.
+
+Which part of the brain may be affected?
+
+ANSWER:
+
+Cerebellum.
+
+Reason:
+
+Cerebellum controls balance, posture and coordination of voluntary movements.
+
+==================================================
+
+12. PROTECTION OF BRAIN 🛡️
+
+Brain is protected by:
+
+Skull
++
+Meninges
++
+Cerebrospinal fluid
+
+The cerebrospinal fluid also helps absorb shocks.
+
+==================================================
+
+13. SPINAL CORD 🧠
+
+Spinal cord is a long bundle of nervous tissue extending from the brain.
+
+Functions:
+
+1. Carries messages between brain and body.
+2. Coordinates many reflex actions.
+
+==================================================
+
+14. VOLUNTARY AND INVOLUNTARY ACTIONS 🔄
+
+VOLUNTARY ACTION:
+
+Actions that are under our conscious control.
+
+Examples:
+
+1. Walking
+2. Writing
+3. Running
+4. Speaking
+
+INVOLUNTARY ACTION:
+
+Actions that occur automatically.
+
+Examples:
+
+1. Heartbeat
+2. Breathing
+3. Digestion
+
+==================================================
+
+15. RECEPTORS 👁️👂👃
+
+Receptors are specialised cells or structures that detect stimuli.
+
+Examples:
+
+Eye → Light
+Ear → Sound
+Nose → Smell
+Tongue → Taste
+Skin → Touch, heat, cold, pressure
+
+==================================================
+
+COMPETENCY QUESTION 🧠
+
+Q. A person cannot feel heat when touching a warm object.
+
+Which component of the nervous system may not be functioning properly?
+
+ANSWER:
+
+Receptors in the skin may not be functioning properly because they detect temperature-related stimuli.
+
+==================================================
+
+16. COORDINATION IN PLANTS 🌱
+
+Plants do not have a nervous system like animals.
+
+They coordinate responses using:
+
+1. Plant hormones
+2. Growth movements
+3. Changes in water content in cells
+
+==================================================
+
+17. PLANT HORMONES 🌱🧪
+
+Important plant hormones:
+
+1. Auxin
+2. Gibberellins
+3. Cytokinins
+4. Abscisic acid (ABA)
+
+==================================================
+
+18. AUXIN 🌱
+
+Auxin promotes cell growth.
+
+It is especially involved in growth of shoots.
+
+Auxin helps plants bend towards light.
+
+==================================================
+
+19. PHOTOTROPISM ☀️🌱
+
+The directional growth of a plant part in response to light is called phototropism.
+
+Shoot usually shows positive phototropism.
+
+Meaning:
+
+Shoot grows towards light.
+
+Example:
+
+A plant kept near a window bends towards sunlight.
+
+==================================================
+
+20. GEOTROPISM / GRAVITROPISM 🌍
+
+Growth response of plants to gravity is called geotropism.
+
+Roots:
+
+Positive geotropism
+
+Roots grow towards gravity.
+
+Shoots:
+
+Negative geotropism
+
+Shoots grow away from gravity.
+
+==================================================
+
+COMPETENCY QUESTION 🧠📝
+
+Q. A plant kept near a window bends towards the light.
+
+(a) Name the movement.
+
+(b) Which hormone is mainly involved?
+
+(c) Why does the shoot bend?
+
+ANSWER:
+
+(a) Phototropism
+
+(b) Auxin
+
+(c) Auxin causes differential growth on the two sides of the shoot, causing it to bend towards light.
+
+==================================================
+
+21. HYDROTROPISM 💧🌱
+
+Growth response of plant parts towards water is called hydrotropism.
+
+Example:
+
+Roots grow towards a source of water.
+
+==================================================
+
+22. CHEMOTROPISM 🧪🌱
+
+Growth response of a plant part towards a chemical stimulus is called chemotropism.
+
+Example:
+
+Growth of pollen tube towards the ovule during fertilisation.
+
+==================================================
+
+23. THIGMOTROPISM 🌿
+
+Growth response to touch is called thigmotropism.
+
+Example:
+
+Tendrils of climbing plants coil around support.
+
+==================================================
+
+24. NASTIC MOVEMENTS 🌱
+
+Nastic movements are non-directional movements in plants in response to stimuli.
+
+Example:
+
+Touch-me-not plant (Mimosa pudica) folds its leaves when touched.
+
+This movement is mainly due to changes in water content and turgor pressure in cells.
+
+==================================================
+
+25. PLANT HORMONES AND THEIR FUNCTIONS 🧪
+
+AUXIN:
+
+Promotes cell growth.
+
+GIBBERELLINS:
+
+Promote stem growth.
+
+CYTOKININS:
+
+Promote cell division.
+
+ABSCISIC ACID (ABA):
+
+Inhibits growth and helps in stomatal closure during water stress.
+
+==================================================
+
+COMPETENCY QUESTION 🧠
+
+Q. During a period of water shortage, a plant closes its stomata.
+
+Which hormone is mainly responsible?
+
+ANSWER:
+
+Abscisic acid (ABA).
+
+==================================================
+
+26. HORMONES IN ANIMALS 🧪
+
+Hormones are chemical messengers secreted by endocrine glands.
+
+They are transported through the blood to target organs.
+
+Important hormones:
+
+1. Growth hormone
+2. Thyroxine
+3. Adrenaline
+4. Insulin
+5. Sex hormones
+
+==================================================
+
+27. ENDOCRINE GLANDS 🧪
+
+Endocrine glands release hormones directly into the bloodstream.
+
+Important endocrine glands:
+
+1. Pituitary
+2. Thyroid
+3. Adrenal
+4. Pancreas
+5. Testes
+6. Ovaries
+
+==================================================
+
+28. PITUITARY GLAND 🧠
+
+Pituitary gland is often called the master gland because it controls several other endocrine glands.
+
+It secretes growth hormone.
+
+Growth hormone helps in growth and development.
+
+==================================================
+
+29. THYROID GLAND 🦋
+
+Thyroid gland produces thyroxine.
+
+Thyroxine controls:
+
+1. Metabolism
+2. Growth
+3. Development
+
+Iodine is required for production of thyroxine.
+
+Deficiency of iodine can cause GOITRE.
+
+==================================================
+
+COMPETENCY QUESTION 🧠📝
+
+Q. A person has swelling in the neck due to iodine deficiency.
+
+(a) Which gland is affected?
+
+(b) Which hormone is deficient?
+
+(c) Name the disease.
+
+ANSWER:
+
+(a) Thyroid gland
+
+(b) Thyroxine
+
+(c) Goitre
+
+==================================================
+
+30. ADRENALINE ⚡
+
+Adrenal glands release adrenaline.
+
+Adrenaline prepares the body for emergency situations.
+
+It is often called the "fight or flight" hormone.
+
+Effects:
+
+1. Heartbeat increases.
+2. Breathing rate increases.
+3. Blood flow to muscles increases.
+4. More glucose becomes available for energy.
+
+==================================================
+
+31. INSULIN 🍬
+
+Insulin is produced by the pancreas.
+
+Function:
+
+It helps regulate blood glucose level.
+
+Insufficient insulin can lead to diabetes.
+
+==================================================
+
+32. SEX HORMONES 👨‍🦱👩‍🦱
+
+Testes produce testosterone.
+
+Ovaries produce oestrogen and progesterone.
+
+They control:
+
+1. Development of secondary sexual characteristics.
+2. Reproductive functions.
+
+==================================================
+
+33. FEEDBACK MECHANISM 🔄
+
+Hormone levels are regulated by feedback mechanisms.
+
+Example:
+
+Thyroxine level is regulated through a feedback mechanism involving the pituitary and thyroid glands.
+
+==================================================
+
+34. NERVOUS CONTROL vs HORMONAL CONTROL 🧠🧪
+
+NERVOUS CONTROL:
+
+1. Uses electrical impulses.
+2. Very fast.
+3. Effects are usually short-lived.
+4. Travels through neurons.
+
+HORMONAL CONTROL:
+
+1. Uses chemical hormones.
+2. Relatively slower.
+3. Effects may last longer.
+4. Hormones travel through blood.
+
+==================================================
+
+35. IMPORTANT DIFFERENCE 📚
+
+TROPIC MOVEMENT vs NASTIC MOVEMENT
+
+Tropic:
+
+1. Directional movement.
+2. Direction depends on direction of stimulus.
+3. Usually involves growth.
+4. Example: Phototropism.
+
+Nastic:
+
+1. Non-directional movement.
+2. Direction does not depend on stimulus direction.
+3. Often caused by changes in turgor.
+4. Example: Mimosa leaf folding.
+
+==================================================
+
+36. IMPORTANT TROPIC MOVEMENTS 🌱
+
+Phototropism → Light
+
+Geotropism → Gravity
+
+Hydrotropism → Water
+
+Chemotropism → Chemicals
+
+Thigmotropism → Touch
+
+==================================================
+
+37. IMPORTANT DIAGRAMS TO PRACTISE ✏️
+
+1. Neuron
+2. Reflex arc
+3. Human brain
+4. Endocrine glands
+5. Phototropism experiment
+
+==================================================
+
+38. COMPETENCY-BASED QUESTIONS 🧠🔥
+
+Q1. A person accidentally touches a hot object and immediately pulls the hand away.
+
+(a) Name the response.
+(b) Which part of CNS coordinates it?
+(c) Why is it fast?
+
+ANSWER:
+
+(a) Reflex action
+(b) Spinal cord
+(c) It is rapidly coordinated through a reflex arc.
+
+--------------------------------------------------
+
+Q2. A plant is kept in a dark room for several days. Its shoot bends when it is later exposed to light from one side.
+
+(a) Name the movement.
+(b) Name the hormone involved.
+(c) What causes bending?
+
+ANSWER:
+
+(a) Phototropism
+(b) Auxin
+(c) Unequal distribution of auxin causes unequal growth on the two sides of the shoot.
+
+--------------------------------------------------
+
+Q3. A person has high blood glucose levels because his body is not producing enough insulin.
+
+(a) Which gland produces insulin?
+(b) What is the role of insulin?
+(c) What condition may result?
+
+ANSWER:
+
+(a) Pancreas
+(b) It helps regulate blood glucose.
+(c) Diabetes.
+
+--------------------------------------------------
+
+Q4. A student has difficulty maintaining balance while walking but can think and remember normally.
+
+Which part of the brain is most likely affected?
+
+ANSWER:
+
+Cerebellum.
+
+--------------------------------------------------
+
+Q5. A plant's roots grow towards a moist region of soil.
+
+(a) Name the movement.
+(b) Is it positive or negative?
+
+ANSWER:
+
+(a) Hydrotropism
+(b) Positive hydrotropism.
+
+--------------------------------------------------
+
+Q6. A person suddenly sees a dangerous situation and his heartbeat becomes faster.
+
+(a) Which hormone is responsible?
+(b) Which gland releases it?
+(c) Why does the body need this response?
+
+ANSWER:
+
+(a) Adrenaline
+(b) Adrenal gland
+(c) It prepares the body for emergency action.
+
+==================================================
+
+39. CASE-BASED QUESTION 📝🔥
+
+A student performed an experiment in which a potted plant was placed near a window. After some days, the shoot bent towards the window.
+
+Questions:
+
+(a) Name the movement.
+
+(b) What stimulus causes this movement?
+
+(c) Name the hormone involved.
+
+(d) Explain why the shoot bends.
+
+ANSWER:
+
+(a) Phototropism
+
+(b) Light
+
+(c) Auxin
+
+(d) Auxin becomes unevenly distributed in the shoot. This causes unequal growth on the two sides, so the shoot bends towards light.
+
+==================================================
+
+40. ASSERTION-REASON QUESTIONS 🧠
+
+Assertion:
+
+Reflex actions are faster than voluntary actions.
+
+Reason:
+
+Reflex actions are rapidly coordinated through a reflex arc.
+
+ANSWER:
+
+Both Assertion and Reason are true, and Reason correctly explains the Assertion.
+
+--------------------------------------------------
+
+Assertion:
+
+Auxin promotes growth in plant shoots.
+
+Reason:
+
+Auxin causes differential growth in response to light.
+
+ANSWER:
+
+Both statements are true, and the Reason explains the bending response during phototropism.
+
+==================================================
+
+41. ONE-SHOT REVISION 🚀
+
+Neuron:
+
+Structural and functional unit of nervous system.
+
+Reflex action:
+
+Quick and automatic response.
+
+Reflex arc:
+
+Pathway of reflex action.
+
+Forebrain:
+
+Thinking, memory, reasoning and voluntary actions.
+
+Cerebellum:
+
+Balance and coordination.
+
+Medulla:
+
+Involuntary actions.
+
+Auxin:
+
+Promotes growth.
+
+Gibberellins:
+
+Stem growth.
+
+Cytokinins:
+
+Cell division.
+
+ABA:
+
+Inhibits growth and helps close stomata.
+
+Phototropism:
+
+Response to light.
+
+Geotropism:
+
+Response to gravity.
+
+Hydrotropism:
+
+Response to water.
+
+Chemotropism:
+
+Response to chemicals.
+
+Thigmotropism:
+
+Response to touch.
+
+Adrenaline:
+
+Emergency hormone.
+
+Thyroxine:
+
+Controls metabolism.
+
+Insulin:
+
+Regulates blood glucose.
+
+==================================================
+
+42. MOST IMPORTANT FOR CBSE BOARD 🎯
+
+1. Neuron
+2. Reflex action
+3. Reflex arc
+4. Human brain
+5. Functions of cerebellum and medulla
+6. Plant hormones
+7. Phototropism
+8. Geotropism
+9. Hydrotropism
+10. Chemotropism
+11. Nastic movement
+12. Tropic vs nastic movement
+13. Endocrine glands
+14. Thyroxine and iodine
+15. Adrenaline
+16. Insulin
+17. Nervous vs hormonal control
+18. Competency-based questions
+19. Case-based questions
+20. Assertion-Reason questions
+
+==================================================
+
+END OF BIOLOGY CHAPTER 2
+CONTROL AND COORDINATION ✅🧠🌱
+    </h5>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 7 — How do Organisms Reproduce?</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Asexual Reproduction</li>
+<li>Sexual Reproduction</li>
+<li>Binary Fission</li>
+<li>Budding</li>
+<li>Vegetative Propagation</li>
+<li>Human Reproductive System</li>
+<li>Reproductive Health</li>
+</ul> 
+    <h5>CLASS 10 SCIENCE
+BIOLOGY - CHAPTER 3
+HOW DO ORGANISMS REPRODUCE?
+
+FULL NOTES + COMPETENCY QUESTIONS + CASE-BASED QUESTIONS
+
+==================================================
+
+1. REPRODUCTION 🧬
+
+Reproduction is the biological process by which living organisms produce new individuals of their own kind.
+
+Importance of reproduction:
+
+1. It ensures continuity of species.
+2. It helps in maintaining the population.
+3. It produces variations.
+4. Variations help organisms adapt to changing environments.
+
+IMPORTANT:
+
+Reproduction is NOT essential for the survival of an individual organism,
+but it is essential for the continuity of a species.
+
+==================================================
+
+2. TYPES OF REPRODUCTION 🌱
+
+There are two main types:
+
+1. Asexual reproduction
+2. Sexual reproduction
+
+==================================================
+
+3. ASEXUAL REPRODUCTION 🔬
+
+Asexual reproduction involves only ONE parent.
+
+Features:
+
+1. Only one parent is required.
+2. No fusion of gametes.
+3. Usually produces genetically similar offspring.
+4. It is generally faster than sexual reproduction.
+
+Examples:
+
+Binary fission
+Budding
+Fragmentation
+Regeneration
+Spore formation
+Vegetative propagation
+
+==================================================
+
+4. BINARY FISSION 🦠
+
+In binary fission, one organism divides into two individuals.
+
+Example:
+
+Amoeba
+
+Process:
+
+Parent cell
+↓
+Nucleus divides
+↓
+Cytoplasm divides
+↓
+Two daughter cells are formed
+
+Another example:
+
+Leishmania
+
+In Leishmania, division occurs in a definite orientation because of its elongated body.
+
+==================================================
+
+COMPETENCY QUESTION 🧠
+
+Q. An organism divides into two daughter organisms by first dividing its nucleus
+and then its cytoplasm.
+
+(a) Name the method.
+(b) Give one example.
+
+ANSWER:
+
+(a) Binary fission
+(b) Amoeba
+
+==================================================
+
+5. BUDDING 🌱
+
+In budding, a small outgrowth called a bud develops on the parent organism.
+
+The bud grows and eventually separates from the parent.
+
+Example:
+
+Yeast
+
+Process:
+
+Parent yeast cell
+↓
+Small bud develops
+↓
+Nucleus divides
+↓
+One nucleus enters the bud
+↓
+Bud grows
+↓
+New yeast cell forms
+
+==================================================
+
+6. FRAGMENTATION 🌿
+
+In fragmentation, an organism breaks into two or more pieces.
+
+Each fragment can grow into a new organism.
+
+Example:
+
+Spirogyra
+
+Favourable conditions help Spirogyra grow and fragment.
+
+==================================================
+
+7. REGENERATION ✨
+
+The ability of an organism to develop new organisms from body parts is called regeneration.
+
+Example:
+
+Planaria
+
+Planaria can regenerate missing body parts.
+
+IMPORTANT:
+
+Regeneration is different from ordinary repair because a complete organism may develop from suitable body fragments in certain organisms.
+
+==================================================
+
+8. SPORE FORMATION 🍄
+
+Spores are tiny reproductive structures that can develop into new organisms under favourable conditions.
+
+Example:
+
+Rhizopus (bread mould)
+
+Special structures called sporangia contain spores.
+
+When sporangium bursts:
+
+Spores are released
+↓
+Spores disperse
+↓
+Under favourable conditions
+↓
+New organism develops
+
+==================================================
+
+COMPETENCY QUESTION 🧠
+
+Q. A fungus produces numerous tiny structures inside a sporangium.
+When the sporangium bursts, these structures are released.
+
+(a) What are these structures?
+(b) Name the reproductive method.
+(c) Give one example.
+
+ANSWER:
+
+(a) Spores
+(b) Spore formation
+(c) Rhizopus
+
+==================================================
+
+9. VEGETATIVE PROPAGATION 🌱
+
+Vegetative propagation is a form of asexual reproduction in which new plants develop from vegetative parts of the parent plant.
+
+Vegetative parts:
+
+1. Root
+2. Stem
+3. Leaf
+
+Examples:
+
+Potato → Stem
+Ginger → Stem
+Bryophyllum → Leaf
+Sweet potato → Root
+
+==================================================
+
+10. ADVANTAGES OF VEGETATIVE PROPAGATION 🌱
+
+1. New plants can be produced quickly.
+2. Plants can be produced from parts of the parent plant.
+3. Useful plants can be propagated easily.
+4. Plants produced are generally genetically similar to the parent.
+
+==================================================
+
+11. SEXUAL REPRODUCTION ❤️
+
+Sexual reproduction involves the formation and fusion of male and female gametes.
+
+Features:
+
+1. Usually involves two parents.
+2. Male and female gametes are formed.
+3. Fusion of gametes occurs.
+4. Produces genetic variation.
+
+==================================================
+
+12. WHY IS VARIATION IMPORTANT? 🧬
+
+During reproduction, small differences may arise among offspring.
+
+These differences are called variations.
+
+Variation is important because:
+
+1. It helps organisms adapt to environmental changes.
+2. It increases the chances of survival of a species.
+3. It contributes to evolution.
+
+Example:
+
+If environmental conditions change, some individuals with favourable variations may survive better.
+
+==================================================
+
+COMPETENCY QUESTION 🧠
+
+Q. Two offspring produced by sexual reproduction are not exactly identical to each other.
+
+Why?
+
+ANSWER:
+
+Sexual reproduction involves genetic material from two parents. During the formation and fusion of gametes, genetic variations arise, so offspring are not usually identical.
+
+==================================================
+
+13. REPRODUCTION IN PLANTS 🌺
+
+Flower is the reproductive organ of many plants.
+
+Main parts:
+
+1. Stamen
+2. Carpel/Pistil
+
+==================================================
+
+14. STAMEN 🌼
+
+Stamen is the male reproductive part of a flower.
+
+It consists of:
+
+1. Anther
+2. Filament
+
+Anther produces pollen grains.
+
+Pollen grains contain male reproductive cells.
+
+==================================================
+
+15. CARPEL / PISTIL 🌸
+
+Carpel is the female reproductive part of a flower.
+
+It consists of:
+
+1. Stigma
+2. Style
+3. Ovary
+
+Stigma:
+Receives pollen grains.
+
+Style:
+Connects stigma to ovary.
+
+Ovary:
+Contains ovules.
+
+==================================================
+
+16. POLLINATION 🌺
+
+Transfer of pollen grains from anther to stigma is called pollination.
+
+Two types:
+
+1. Self-pollination
+2. Cross-pollination
+
+Self-pollination:
+
+Pollen reaches the stigma of the same flower or another flower on the same plant.
+
+Cross-pollination:
+
+Pollen is transferred from one plant to another plant of the same species.
+
+Agents:
+
+Wind
+Water
+Insects
+Animals
+
+==================================================
+
+17. FERTILISATION 🧬
+
+Fusion of male and female gametes is called fertilisation.
+
+Male gamete + Female gamete
+↓
+Zygote
+
+The zygote develops into an embryo.
+
+==================================================
+
+18. AFTER FERTILISATION 🌱
+
+After fertilisation:
+
+Zygote → Embryo
+
+Ovule → Seed
+
+Ovary → Fruit
+
+The seed can develop into a new plant under suitable conditions.
+
+==================================================
+
+COMPETENCY QUESTION 🧠
+
+Q. After fertilisation in a flowering plant:
+
+(a) What does the zygote become?
+(b) What does the ovule become?
+(c) What does the ovary become?
+
+ANSWER:
+
+(a) Zygote develops into embryo.
+(b) Ovule develops into seed.
+(c) Ovary develops into fruit.
+
+==================================================
+
+19. REPRODUCTION IN HUMAN BEINGS 👨‍👩‍👧
+
+Human beings reproduce sexually.
+
+Male and female reproductive systems produce gametes.
+
+Male gamete:
+
+Sperm
+
+Female gamete:
+
+Ovum (egg)
+
+==================================================
+
+20. MALE REPRODUCTIVE SYSTEM 👨
+
+Main parts:
+
+1. Testes
+2. Scrotum
+3. Vas deferens
+4. Seminal vesicles
+5. Prostate gland
+6. Urethra
+7. Penis
+
+==================================================
+
+21. TESTES
+
+Testes are the male reproductive organs.
+
+Functions:
+
+1. Produce sperm.
+2. Produce testosterone.
+
+Testes are located in the scrotum.
+
+The scrotum keeps the testes at a temperature slightly lower than body temperature, which is suitable for sperm formation.
+
+==================================================
+
+22. MALE GAMETE - SPERM 🧬
+
+Sperm is the male reproductive cell.
+
+It is very small and motile.
+
+Main parts:
+
+1. Head
+2. Middle piece
+3. Tail
+
+The tail helps sperm move.
+
+==================================================
+
+23. FEMALE REPRODUCTIVE SYSTEM 👩
+
+Main parts:
+
+1. Ovaries
+2. Fallopian tubes
+3. Uterus
+4. Cervix
+5. Vagina
+
+==================================================
+
+24. OVARIES
+
+Ovaries are the female reproductive organs.
+
+Functions:
+
+1. Produce ova (eggs).
+2. Produce female sex hormones such as oestrogen and progesterone.
+
+==================================================
+
+25. OVUM 🥚
+
+Ovum is the female reproductive cell.
+
+It is larger than sperm and generally non-motile.
+
+==================================================
+
+26. FERTILISATION IN HUMANS 🧬
+
+In humans, fertilisation normally occurs in the fallopian tube.
+
+Sperm + Ovum
+↓
+Zygote
+
+Zygote divides repeatedly
+↓
+Embryo
+↓
+Implantation in uterus
+
+==================================================
+
+27. IMPLANTATION 🌱
+
+The embryo gets attached to the lining of the uterus.
+
+This process is called implantation.
+
+The uterus provides a suitable environment for development of the embryo.
+
+==================================================
+
+28. PLACENTA 👶
+
+Placenta is a special tissue that develops between the mother and embryo.
+
+It helps in exchange of:
+
+1. Oxygen
+2. Nutrients
+3. Waste materials
+
+between maternal and embryonic blood supplies.
+
+==================================================
+
+29. MENSTRUAL CYCLE 🩸
+
+In human females, one ovum generally matures during each menstrual cycle.
+
+If fertilisation does not occur:
+
+The thickened uterine lining breaks down
+↓
+Bleeding occurs
+↓
+This is menstruation
+
+The menstrual cycle is generally about 28 days, although it can vary.
+
+==================================================
+
+30. PUBERTY 🧑‍🎓
+
+Puberty is the stage when the reproductive organs mature and the body develops secondary sexual characteristics.
+
+In boys:
+
+1. Facial hair develops.
+2. Voice becomes deeper.
+3. Testes begin producing sperm.
+4. Shoulders generally broaden.
+
+In girls:
+
+1. Breasts develop.
+2. Menstruation begins.
+3. Ovaries mature.
+4. Hips generally broaden.
+
+These changes are controlled mainly by hormones.
+
+==================================================
+
+31. REPRODUCTIVE HEALTH ❤️
+
+Reproductive health means maintaining physical, mental and social well-being related to the reproductive system.
+
+Important points:
+
+1. Personal hygiene.
+2. Awareness about reproductive health.
+3. Prevention of sexually transmitted infections.
+4. Responsible reproductive choices.
+
+==================================================
+
+32. CONTRACEPTION 🛡️
+
+Contraception means preventing pregnancy.
+
+Methods include:
+
+1. Barrier methods
+2. Hormonal methods
+3. Intrauterine devices
+4. Surgical methods
+
+Examples:
+
+Condoms
+Oral contraceptive pills
+Copper-T
+
+IMPORTANT:
+
+Condoms can also reduce the risk of many sexually transmitted infections.
+
+==================================================
+
+33. SEXUALLY TRANSMITTED INFECTIONS 🦠
+
+Some infections can spread through sexual contact.
+
+Examples:
+
+1. Gonorrhoea
+2. Syphilis
+3. HIV/AIDS
+
+Prevention includes:
+
+1. Maintaining safe and responsible sexual health practices.
+2. Using appropriate protection.
+3. Avoiding sharing contaminated needles.
+4. Using screened blood for transfusion.
+
+==================================================
+
+34. IMPORTANT DIFFERENCE 📚
+
+ASEXUAL vs SEXUAL REPRODUCTION
+
+Asexual:
+
+1. One parent.
+2. No fusion of gametes.
+3. Usually less variation.
+4. Faster.
+5. Examples: Amoeba, yeast.
+
+Sexual:
+
+1. Usually two parents.
+2. Fusion of gametes occurs.
+3. Produces variation.
+4. Generally slower.
+5. Example: Humans.
+
+==================================================
+
+35. IMPORTANT DIFFERENCE 📚
+
+SELF-POLLINATION vs CROSS-POLLINATION
+
+Self-pollination:
+
+Pollen is transferred to the stigma of the same flower or another flower on the same plant.
+
+Cross-pollination:
+
+Pollen is transferred from one plant to another plant of the same species.
+
+==================================================
+
+36. IMPORTANT DIAGRAMS TO PRACTISE ✏️
+
+1. Binary fission in Amoeba
+2. Budding in yeast
+3. Spore formation in Rhizopus
+4. Structure of flower
+5. Male reproductive system
+6. Female reproductive system
+7. Sperm
+8. Female reproductive tract
+
+==================================================
+
+37. COMPETENCY-BASED QUESTIONS 🧠🔥
+
+Q1. A farmer wants to produce many plants quickly that are genetically similar to a particular parent plant.
+
+Which method would be suitable?
+
+ANSWER:
+
+Vegetative propagation.
+
+Reason:
+
+It is asexual reproduction and generally produces plants genetically similar to the parent.
+
+--------------------------------------------------
+
+Q2. A flower has bright petals and produces nectar.
+
+Why are these features useful for reproduction?
+
+ANSWER:
+
+They attract insects and other pollinators, which help transfer pollen from anther to stigma.
+
+--------------------------------------------------
+
+Q3. A plant produces seeds after the transfer of pollen from one plant to another plant of the same species.
+
+(a) Name the type of pollination.
+(b) What advantage can it provide?
+
+ANSWER:
+
+(a) Cross-pollination.
+(b) It can promote genetic variation.
+
+--------------------------------------------------
+
+Q4. An organism produces offspring without formation or fusion of gametes.
+
+(a) What type of reproduction is this?
+(b) Give two examples.
+
+ANSWER:
+
+(a) Asexual reproduction.
+(b) Amoeba and yeast.
+
+--------------------------------------------------
+
+Q5. A couple wants to prevent pregnancy and also reduce the risk of sexually transmitted infections.
+
+Which contraceptive method can provide both benefits?
+
+ANSWER:
+
+Condoms.
+
+==================================================
+
+38. CASE-BASED QUESTION 📝🔥
+
+A gardener cuts a healthy stem from a plant and places it under suitable conditions. After some time, the stem develops roots and grows into a new plant.
+
+Questions:
+
+(a) Which type of reproduction is involved?
+
+(b) Is it sexual or asexual?
+
+(c) Name the method.
+
+(d) What is one advantage of this method?
+
+ANSWER:
+
+(a) Asexual reproduction.
+
+(b) Asexual.
+
+(c) Vegetative propagation.
+
+(d) It can produce new plants quickly and generally maintains desirable characteristics of the parent plant.
+
+==================================================
+
+39. CASE-BASED QUESTION 📝
+
+A flower has anthers and a stigma. Pollen grains are transferred from the anther to the stigma. Later, a pollen tube grows towards the ovule and fertilisation occurs.
+
+Questions:
+
+(a) What is the transfer of pollen called?
+
+(b) Where is pollen produced?
+
+(c) Where are ovules present?
+
+(d) What is formed after fertilisation?
+
+ANSWER:
+
+(a) Pollination.
+
+(b) Anther.
+
+(c) Ovary.
+
+(d) Zygote.
+
+==================================================
+
+40. ASSERTION-REASON QUESTIONS 🧠
+
+Assertion:
+
+Sexual reproduction produces more variation than asexual reproduction.
+
+Reason:
+
+Sexual reproduction involves genetic material from two parents.
+
+ANSWER:
+
+Both Assertion and Reason are true, and Reason correctly explains the Assertion.
+
+--------------------------------------------------
+
+Assertion:
+
+Vegetative propagation can produce plants similar to the parent plant.
+
+Reason:
+
+It is a form of asexual reproduction.
+
+ANSWER:
+
+Both Assertion and Reason are true, and Reason correctly explains the Assertion.
+
+==================================================
+
+41. IMPORTANT BOARD QUESTIONS 🎯
+
+Q1. What is reproduction? Why is it important?
+
+Q2. Differentiate between sexual and asexual reproduction.
+
+Q3. Explain binary fission in Amoeba.
+
+Q4. Explain budding in yeast.
+
+Q5. Explain spore formation in Rhizopus.
+
+Q6. What is vegetative propagation? Give examples.
+
+Q7. What is pollination? Explain its types.
+
+Q8. What happens after fertilisation in a flower?
+
+Q9. Explain the structure and function of the male reproductive system.
+
+Q10. Explain the structure and function of the female reproductive system.
+
+Q11. Where does fertilisation occur in human females?
+
+Q12. What is implantation?
+
+Q13. What is the role of placenta?
+
+Q14. What is menstruation?
+
+Q15. Why is variation important?
+
+Q16. What are contraceptive methods?
+
+Q17. Name some sexually transmitted infections.
+
+==================================================
+
+42. ONE-SHOT REVISION 🚀
+
+Reproduction:
+
+Production of new individuals.
+
+Asexual:
+
+One parent + no gamete fusion.
+
+Sexual:
+
+Gamete formation + fusion.
+
+Binary fission:
+
+Amoeba.
+
+Budding:
+
+Yeast.
+
+Fragmentation:
+
+Spirogyra.
+
+Regeneration:
+
+Planaria.
+
+Spore formation:
+
+Rhizopus.
+
+Vegetative propagation:
+
+Potato, ginger, Bryophyllum.
+
+Male reproductive part of flower:
+
+Stamen.
+
+Female reproductive part:
+
+Carpel/Pistil.
+
+Anther:
+
+Produces pollen.
+
+Ovary:
+
+Contains ovules.
+
+Pollination:
+
+Transfer of pollen from anther to stigma.
+
+Fertilisation:
+
+Fusion of male and female gametes.
+
+Zygote:
+
+First cell formed after fertilisation.
+
+Ovule:
+
+Becomes seed.
+
+Ovary:
+
+Becomes fruit.
+
+Male gamete:
+
+Sperm.
+
+Female gamete:
+
+Ovum.
+
+Male reproductive hormone:
+
+Testosterone.
+
+Female reproductive hormones:
+
+Oestrogen and progesterone.
+
+Human fertilisation:
+
+Normally occurs in fallopian tube.
+
+Implantation:
+
+Attachment of embryo to uterine lining.
+
+==================================================
+
+43. MOST IMPORTANT FOR CBSE BOARD 🎯🔥
+
+1. Asexual reproduction
+2. Binary fission
+3. Budding
+4. Fragmentation
+5. Regeneration
+6. Spore formation
+7. Vegetative propagation
+8. Sexual reproduction
+9. Variation
+10. Structure of flower
+11. Pollination
+12. Fertilisation
+13. Changes after fertilisation
+14. Male reproductive system
+15. Female reproductive system
+16. Fertilisation and implantation
+17. Menstrual cycle
+18. Placenta
+19. Contraceptive methods
+20. Reproductive health
+21. Competency-based questions
+22. Case-based questions
+23. Assertion-Reason questions
+24. Important diagrams
+
+==================================================
+
+END OF BIOLOGY CHAPTER 3
+HOW DO ORGANISMS REPRODUCE? ✅🧬🌱</h5>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 8 — Heredity</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Genes</li>
+<li>Chromosomes</li>
+<li>Mendel's Experiments</li>
+<li>Dominant Traits</li>
+<li>Recessive Traits</li>
+<li>Sex Determination</li>
+<li>Evolution</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 9 — Light: Reflection and Refraction</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+Mirror Formula:<br>
+1/f = 1/v + 1/u
+
+<br><br>
+
+Magnification:<br>
+m = -v/u
+
+</div>
+
+<ul>
+<li>Reflection</li>
+<li>Refraction</li>
+<li>Ray Diagrams</li>
+<li>Mirror Formula</li>
+<li>Lens Formula</li>
+<li>Magnification</li>
+<li>Power of Lens</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 10 — Human Eye and Colourful World</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Human Eye</li>
+<li>Accommodation</li>
+<li>Myopia</li>
+<li>Hypermetropia</li>
+<li>Presbyopia</li>
+<li>Dispersion</li>
+<li>Scattering of Light</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 11 — Electricity</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+I = Q/t
+
+<br><br>
+
+V = IR
+
+<br><br>
+
+P = VI
+
+<br><br>
+
+P = I²R
+
+</div>
+
+<ul>
+<li>Electric Current</li>
+<li>Potential Difference</li>
+<li>Resistance</li>
+<li>Ohm's Law</li>
+<li>Series Combination</li>
+<li>Parallel Combination</li>
+<li>Electrical Power</li>
+<li>Electrical Energy</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 12 — Magnetic Effects of Electric Current</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Magnetic Field</li>
+<li>Magnetic Field Lines</li>
+<li>Right Hand Thumb Rule</li>
+<li>Solenoid</li>
+<li>Electric Motor</li>
+<li>Electric Generator</li>
+<li>Electromagnetic Induction</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 13 — Our Environment</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Ecosystem</li>
+<li>Food Chain</li>
+<li>Trophic Levels</li>
+<li>Biodegradable Waste</li>
+<li>Non-biodegradable Waste</li>
+<li>Ozone Layer</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- MATHEMATICS -->
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 1 — Real Numbers</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+a = bq + r
+<br>
+0 ≤ r &lt; b
+</div>
+
+<ul>
+<li>Euclid's Division Algorithm</li>
+<li>HCF</li>
+<li>LCM</li>
+<li>Fundamental Theorem of Arithmetic</li>
+<li>Irrational Numbers</li>
+<li>Decimal Expansion</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 2 — Polynomials</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Zeroes of Polynomial</li>
+<li>Relationship between zeroes and coefficients</li>
+<li>Quadratic Polynomial</li>
+<li>Cubic Polynomial</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 3 — Pair of Linear Equations</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+a₁x + b₁y + c₁ = 0
+<br>
+a₂x + b₂y + c₂ = 0
+</div>
+
+<ul>
+<li>Graphical Method</li>
+<li>Substitution Method</li>
+<li>Elimination Method</li>
+<li>Cross Multiplication Method</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 4 — Quadratic Equations</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+ax² + bx + c = 0
+
+<br><br>
+
+x = (-b ± √(b² - 4ac))/2a
+
+<br><br>
+
+D = b² - 4ac
+
+</div>
+
+<ul>
+<li>Quadratic Equation</li>
+<li>Factorisation</li>
+<li>Quadratic Formula</li>
+<li>Discriminant</li>
+<li>Nature of Roots</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 5 — Arithmetic Progressions</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+aₙ = a + (n - 1)d
+
+<br><br>
+
+Sₙ = n/2 [2a + (n - 1)d]
+
+</div>
+
+<ul>
+<li>First Term</li>
+<li>Common Difference</li>
+<li>nth Term</li>
+<li>Sum of AP</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 6 — Triangles</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Similar Triangles</li>
+<li>Basic Proportionality Theorem</li>
+<li>Areas of Similar Triangles</li>
+<li>Pythagoras Theorem</li>
+</ul>
+
+<div class="formula">
+Hypotenuse² = Base² + Perpendicular²
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 7 — Coordinate Geometry</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+Distance =
+√[(x₂-x₁)² + (y₂-y₁)²]
+
+</div>
+
+<ul>
+<li>Distance Formula</li>
+<li>Section Formula</li>
+<li>Area of Triangle</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 8 — Introduction to Trigonometry</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+sin θ = P/H
+
+<br><br>
+cos θ = B/H
+
+<br><br>
+tan θ = P/B
+
+<br><br>
+sin²θ + cos²θ = 1
+
+</div>
+
+<ul>
+<li>Trigonometric Ratios</li>
+<li>Standard Angles</li>
+<li>Trigonometric Identities</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 9 — Applications of Trigonometry</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Height and Distance</li>
+<li>Angle of Elevation</li>
+<li>Angle of Depression</li>
+<li>Line of Sight</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 10 — Circles</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Tangent</li>
+<li>Radius and Tangent</li>
+<li>Two Tangents from External Point</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 11 — Areas Related to Circles</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+Area = πr²
+
+<br><br>
+
+Circumference = 2πr
+
+<br><br>
+
+Sector Area = θ/360 × πr²
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 12 — Surface Areas and Volumes</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Cube</li>
+<li>Cuboid</li>
+<li>Cylinder</li>
+<li>Cone</li>
+<li>Sphere</li>
+<li>Hemisphere</li>
+</ul>
+
+<div class="formula">
+
+Cylinder Volume = πr²h
+
+<br><br>
+
+Sphere Volume = 4/3 πr³
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 13 — Statistics</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Mean</li>
+<li>Median</li>
+<li>Mode</li>
+<li>Grouped Data</li>
+<li>Cumulative Frequency</li>
+<li>Ogive</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 14 — Probability</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+P(E) =
+Favourable Outcomes /
+Total Outcomes
+
+</div>
+
+<ul>
+<li>0 ≤ P(E) ≤ 1</li>
+<li>Probability of impossible event = 0</li>
+<li>Probability of sure event = 1</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- HISTORY -->
+
+<div class="chapter" data-subject="History">
+
+<div class="chapter-head">
+<b>📜 History 1 — The Rise of Nationalism in Europe</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>French Revolution</li>
+<li>Liberalism</li>
+<li>Conservatism</li>
+<li>Unification of Germany</li>
+<li>Unification of Italy</li>
+<li>Balkan Region</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="History">
+
+<div class="chapter-head">
+<b>📜 History 2 — Nationalism in India</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Rowlatt Act</li>
+<li>Jallianwala Bagh</li>
+<li>Non-Cooperation Movement</li>
+<li>Civil Disobedience Movement</li>
+<li>Dandi March</li>
+<li>Collective Belonging</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="History">
+
+<div class="chapter-head">
+<b>📜 History 3 — The Making of a Global World</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Silk Routes</li>
+<li>Colonialism</li>
+<li>Indentured Labour</li>
+<li>Great Depression</li>
+<li>Globalisation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="History">
+
+<div class="chapter-head">
+<b>📜 History 4 — Print Culture and Modern World</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Printing in China</li>
+<li>Gutenberg Press</li>
+<li>Print Revolution</li>
+<li>Print and Religion</li>
+<li>Print in India</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- GEOGRAPHY -->
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 1 — Resources and Development</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Types of Resources</li>
+<li>Resource Planning</li>
+<li>Land Resources</li>
+<li>Soil Types</li>
+<li>Soil Conservation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 2 — Forest and Wildlife Resources</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Biodiversity</li>
+<li>Flora and Fauna</li>
+<li>Conservation</li>
+<li>Protected Areas</li>
+<li>Community Participation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 3 — Water Resources</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Water Scarcity</li>
+<li>Multipurpose Projects</li>
+<li>Rainwater Harvesting</li>
+<li>Water Conservation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 4 — Agriculture</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Types of Farming</li>
+<li>Major Crops</li>
+<li>Rice</li>
+<li>Wheat</li>
+<li>Cotton</li>
+<li>Tea</li>
+<li>Coffee</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 5 — Minerals and Energy Resources</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Metallic Minerals</li>
+<li>Non-metallic Minerals</li>
+<li>Coal</li>
+<li>Petroleum</li>
+<li>Natural Gas</li>
+<li>Renewable Energy</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 6 — Manufacturing Industries</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Agro-based Industries</li>
+<li>Mineral-based Industries</li>
+<li>Industrial Pollution</li>
+<li>Pollution Control</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 7 — Lifelines of National Economy</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Roadways</li>
+<li>Railways</li>
+<li>Waterways</li>
+<li>Airways</li>
+<li>Communication</li>
+<li>International Trade</li>
+<li>Tourism</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- CIVICS -->
+
+<div class="chapter" data-subject="Civics">
+
+<div class="chapter-head">
+<b>🏛️ Civics 1 — Power Sharing</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Belgium Model</li>
+<li>Sri Lanka</li>
+<li>Forms of Power Sharing</li>
+<li>Majoritarianism</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Civics">
+
+<div class="chapter-head">
+<b>🏛️ Civics 2 — Federalism</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Union Government</li>
+<li>State Government</li>
+<li>Local Government</li>
+<li>Decentralisation</li>
+<li>Coming Together Federation</li>
+<li>Holding Together Federation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Civics">
+
+<div class="chapter-head">
+<b>🏛️ Civics 3 — Gender, Religion and Caste</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Gender Division</li>
+<li>Religion and Politics</li>
+<li>Caste Inequalities</li>
+<li>Caste in Politics</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Civics">
+
+<div class="chapter-head">
+<b>🏛️ Civics 4 — Political Parties</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Functions of Political Parties</li>
+<li>Challenges</li>
+<li>Reforms</li>
+<li>National Parties</li>
+<li>State Parties</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Civics">
+
+<div class="chapter-head">
+<b>🏛️ Civics 5 — Outcomes of Democracy</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Accountable Government</li>
+<li>Responsive Government</li>
+<li>Legitimate Government</li>
+<li>Economic Outcomes</li>
+<li>Dignity and Freedom</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- ECONOMICS -->
+
+<div class="chapter" data-subject="Economics">
+
+<div class="chapter-head">
+<b>💰 Economics 1 — Development</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Development Goals</li>
+<li>Per Capita Income</li>
+<li>Public Facilities</li>
+<li>Human Development</li>
+<li>Sustainable Development</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Economics">
+
+<div class="chapter-head">
+<b>💰 Economics 2 — Sectors of Indian Economy</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Primary Sector</li>
+<li>Secondary Sector</li>
+<li>Tertiary Sector</li>
+<li>Organised Sector</li>
+<li>Unorganised Sector</li>
+<li>Public Sector</li>
+<li>Private Sector</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Economics">
+
+<div class="chapter-head">
+<b>💰 Economics 3 — Money and Credit</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Money</li>
+<li>Banks</li>
+<li>Credit</li>
+<li>Collateral</li>
+<li>Formal Credit</li>
+<li>Informal Credit</li>
+<li>Self Help Groups</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Economics">
+
+<div class="chapter-head">
+<b>💰 Economics 4 — Globalisation</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>MNCs</li>
+<li>Foreign Investment</li>
+<li>Global Production</li>
+<li>Liberalisation</li>
+<li>Impact of Globalisation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Economics">
+
+<div class="chapter-head">
+<b>💰 Economics 5 — Consumer Rights</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Right to Safety</li>
+<li>Right to Information</li>
+<li>Right to Choose</li>
+<li>Right to Seek Redressal</li>
+<li>Consumer Education</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- ENGLISH -->
+
+<div class="chapter" data-subject="English">
+
+<div class="chapter-head">
+<b>📖 English — Literature and Writing</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Reading Comprehension</li>
+<li>Literature</li>
+<li>Poetry</li>
+<li>Grammar</li>
+<li>Formal Letter</li>
+<li>Analytical Paragraph</li>
+<li>Important Questions</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- HINDI -->
+
+<div class="chapter" data-subject="Hindi">
+
+<div class="chapter-head">
+<b>🇮🇳 Hindi — साहित्य और लेखन</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>गद्य</li>
+<li>काव्य</li>
+<li>पूरक पाठ</li>
+<li>व्याकरण</li>
+<li>लेखन</li>
+<li>अपठित बोध</li>
+<li>महत्वपूर्ण प्रश्न</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+</div>
+</div>
+</section>
+
+
+<footer>
+
+<h2>📚 Class X Smart Notes</h2>
+
+<p>
+Study Smart • Practice Daily • Score Better 🚀
+</p>
+
+</footer>
+
+
+<script>
+
+const chapters =
+document.querySelectorAll(".chapter");
+
+
+/* OPEN / CLOSE CHAPTER */
+
+document
+.querySelectorAll(".chapter-head")
+.forEach(function(head){
+
+head.addEventListener("click",function(){
+
+this.parentElement.classList.toggle("open");
+
+});
+
+});
+
+
+/* SEARCH */
+
+function searchNotes(){
+
+let text =
+document
+.getElementById("search")
+.value
+.toLowerCase();
+
+chapters.forEach(function(chapter){
+
+let content =
+chapter.innerText.toLowerCase();
+
+if(content.includes(text)){
+chapter.style.display="block";
+}
+else{
+chapter.style.display="none";
+}
+
+});
+
+}
+
+
+/* SUBJECT FILTER */
+
+function filterSubject(subject){
+
+chapters.forEach(function(chapter){
+
+if(chapter.dataset.subject === subject){
+
+chapter.style.display="block";
+
+}
+else{
+
+chapter.style.display="none";
+
+}
+
+});
+
+document
+.getElementById("search")
+.value="";
+
+document
+.getElementById("chapters")
+.scrollIntoView({
+behavior:"smooth"
+});
+
+}
+
+
+/* HOME */
+
+function goHome(){
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+
+/* DARK MODE */
+
+function darkMode(){
+
+document
+.body
+.classList
+.toggle("dark");
+
+localStorage.setItem(
+"darkMode",
+document.body.classList.contains("dark")
+);
+
+}
+
+
+/* LOAD DARK MODE */
+
+if(
+localStorage.getItem("darkMode")==="true"
+){
+
+document
+.body
+.classList
+.add("dark");
+
+}
+
+
+/* COMPLETED CHAPTER */
+
+function completeChapter(button){
+
+button.classList.toggle("completed");
+
+if(button.classList.contains("completed")){
+
+button.innerText="Completed ✓";
+
+}
+else{
+
+button.innerText="Mark Complete ✓";
+
+}
+
+}
+
+</script>
+
+</body>
+<br>
+
+   ............<a href ="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?projector=1/">........land</a>
+  ...........deko beta jindagi me kuchh karna hai 
+  ............<br>
+  .....................tb padhai likhai karna hoga
+...........<br>
+
+</html>
